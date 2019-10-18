@@ -24,8 +24,25 @@
   * ConcurrentQueue<T>
   
 ## Agents
+> Sentences marked with **bold** are actions that should be displayed to the user through text
 ### Bartender
 * Has it's own thread
-* Waits in the bar for customer to show up
+* **Waits in the bar** for customer to show up
+* As soon as a customer arrives, **The bartender goes to the shelf** to pick up a glass
+ * This action should take three seconds
+* Then he **Pours a glass of beer for the customer** and waits for the next customer again
+ * This action should take three seconds
+* **Bartender goes home** when all the last customers have left
+
+### Waiter
+* **Picks up empty glasses** that exist on the tables
+ * This action takes ten seconds
+* Then she **Washes glasses**
+ * This action takes fifteen seconds
+* Then she **Puts the glasses on the shelf**
+* **Waiter goes home** when all the last customers have left
+
+###
+
 
 
