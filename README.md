@@ -63,7 +63,7 @@
  * Finishing the beer takes between ten and twenty seconds (randomize)
 * When they are done with their beer, the **Customer leaves**
 
-##Testing
+## Testing
 * Test the application with different values of parameters
  * Standard values
  * 20 glasses, 3 chairs
@@ -74,7 +74,7 @@
  * Couples night - bartender always lets in two customers whenever they let someone in
  * Double the amount of time between bouncer let-ins, after 20 seconds 15 guests are let in at once (one-time event)
  
-### Bedömning
+# Bedömning
 När ni är klara med laborationen ska ni se till att en annan grupp granskar er laboration. Det är ert eget ansvar att se till att just er laboration blir granskad. (Om det är svårt att hitta kodgranskare, så rekommenderar jag mutor i form av riktig öl) Ni ska dessutom granska en annan grupps kod
 
 ## Inlämning via ithsdistans
@@ -89,7 +89,6 @@ När ni är klara med laborationen ska ni se till att en annan grupp granskar er
 * Eftersom det är en gruppuppgift så lämnar en partner in koden
 * Den partner som inte lämnar in kod skall istället lämna in en kommentar. Till exempel
 “Jobbar i grupp med Pontus Lindgren”
-
 
 **Kriterier för godkänt**
 * programmet går att köra i alla åtta testfall utan att det kraschar
