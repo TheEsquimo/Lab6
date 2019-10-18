@@ -8,6 +8,7 @@
 * Label to display number of guests in the bar
 * Label to display number of glasses on the shelf
 * Label to display number of available/free seats/chairs
+* Slider (or buttons) to increase or decrease speed of actions
 * ListBox for bartender
 * ListBox for waiter
 * ListBox for bouncer + guests
