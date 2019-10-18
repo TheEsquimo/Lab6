@@ -22,9 +22,12 @@
 * To represent the shelf and chairs; use threadsafe collection such as
   * BlockingCollection
   * ConcurrentQueue<T>
+* 8 glasses
+* 9 chairs
   
 ## Agents
 > Sentences marked with **bold** are actions that should be displayed to the user through text
+> Whenever the time of actions are given, they should technically be theSpeedGiven * speedMultiplier
 ### Bartender
 * Has it's own thread
 * **Waits in the bar** for customer to show up
@@ -42,7 +45,22 @@
 * Then she **Puts the glasses on the shelf**
 * **Waiter goes home** when all the last customers have left
 
-###
+### Bouncer
+* Lets in customers at random time-intervals
+ * Three to ten seconds
+* Checks ID, basically giving the customer a random name from a list of predefined ones
+* The bouncer stops letting new customers in when the bar closes and **The bounces goes home**
+
+### Patron
+* **Customer enter pub** and goes directly to the bar
+ * This action takes one second
+* Waits until the bartender gives beer
+* Then **Customer looks for an empty seat**
+ * Getting to the seat takes four seconds
+ * If there are no seats available, they wait until there is one
+* **Customer sits down** and drinks their beer
+ * Finishing the beer takes between ten and twenty seconds (randomize)
+* When they are done with their beer, the **Customer leaves**
 
 
 
