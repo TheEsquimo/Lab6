@@ -71,7 +71,6 @@ namespace Lab6
             guestsWaitingForBeer = new ConcurrentQueue<Guest>();
             guestsWaitingForSeat = new ConcurrentQueue<Guest>();
 
-
             timeTillBarCloses = 120;
             Bouncer bouncer = new Bouncer();
             bouncer.TheMainWindow = this;
