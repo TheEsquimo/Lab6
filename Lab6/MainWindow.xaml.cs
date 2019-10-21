@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -45,7 +46,7 @@ namespace Lab6
             "DudeGuyer",
             "Bert-Erik"
         };
-
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -65,10 +66,16 @@ namespace Lab6
                 chairs.Add(newChair);
             }
             chairs.CompleteAdding();
-
+            
             dirtyGlasses = new BlockingCollection<Glass>();
             guestsWaitingForBeer = new ConcurrentQueue<Guest>();
             guestsWaitingForSeat = new ConcurrentQueue<Guest>();
+
+
+            timeTillBarCloses = 120;
+            Bouncer bouncer = new Bouncer();
+            bouncer.TheMainWindow = this;
+            bouncer.LetGuestsIn();
 
             bartender.TheMainWindow = this;
             bartender.Start();
