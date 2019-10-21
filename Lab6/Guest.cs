@@ -1,6 +1,11 @@
 ﻿namespace Lab6
 {
-    internal class Guest
+    public class Guest
     {
+        public string Name { get; set; }
+        public Guest(string name)
+        {
+            Name = name;
+        }
     }
 }
