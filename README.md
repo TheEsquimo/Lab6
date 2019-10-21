@@ -2,16 +2,6 @@
 
 # To-Do-List
 ### WPF ELEMENTS
-* Label to display time left till bar closes
-  * This isn't the end of the simulation, just the time till the bar doesn't let any new guests in
-  * The bar actually closes (the simulation ends) when all guests have gone home
-* Label to display number of guests in the bar
-* Label to display number of glasses on the shelf
-* Label to display number of available/free seats/chairs
-* Slider (or buttons) to increase or decrease speed of actions
-* ListBox for bartender
-* ListBox for waiter
-* ListBox for bouncer + guests
 * When something happens an agent, make it readable in the corresponding ListBox
   * Use Items.Insert to add text-messages, as opposed to Items.Add
   * At the start of the text-message, there should be an "order number" or timestamp.
