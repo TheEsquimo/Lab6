@@ -13,8 +13,10 @@
 * To represent the shelf and chairs; use threadsafe collection such as
   * BlockingCollection
   * ConcurrentQueue<T>
-* 8 glasses
-* 9 chairs
+* ShelfList: 8 glasses
+* ChairsList: 9 chairs
+* EmptyGlassesList
+* WaitressDishesList
   
 ## Agents
 > Sentences marked with **bold** are actions that should be displayed to the user through text
@@ -30,6 +32,9 @@
 * **Bartender goes home** when all the last customers have left
 
 ### Waiter
+* GlassesList for dishes to be washed and then returned to the shelf
+
+ROUTINE:
 * **Picks up empty glasses** that exist on the tables
  * This action takes ten seconds
 * Then she **Washes glasses**
@@ -38,12 +43,17 @@
 * **Waiter goes home** when all the last customers have left
 
 ### Bouncer
+ROUTINE:
 * Lets in customers at random time-intervals
  * Three to ten seconds
 * Checks ID, basically giving the customer a random name from a list of predefined ones
 * The bouncer stops letting new customers in when the bar closes and **The bounces goes home**
 
 ### Patron
+string name
+Glass glass
+
+ROUTINE:
 * **Customer enter pub** and goes directly to the bar
  * This action takes one second
 * Waits until the bartender gives beer
@@ -53,6 +63,13 @@
 * **Customer sits down** and drinks their beer
  * Finishing the beer takes between ten and twenty seconds (randomize)
 * When they are done with their beer, the **Customer leaves**
+
+## Other classes
+### Chair
+Guest currentSitter
+
+### Glass
+
 
 ## Testing
 * Test the application with different values of parameters
