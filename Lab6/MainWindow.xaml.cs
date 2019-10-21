@@ -25,11 +25,13 @@ namespace Lab6
         internal double timeTillBarCloses;
         int glassAmount = 8;
         int chairAmount = 9;
+        internal int simulationSpeed = 1;
         internal BlockingCollection<Glass> glassShelf;
         internal BlockingCollection<Glass> dirtyGlasses;
         internal BlockingCollection<Chair> chairs;
         internal ConcurrentQueue<Guest> guestsWaitingForBeer;
         internal ConcurrentQueue<Guest> guestsWaitingForSeat;
+        Bartender bartender = new Bartender();
         internal List<string> guestNames = new List<string>
         {
             "Bert",
@@ -44,6 +46,7 @@ namespace Lab6
             "DudeGuyer",
             "Bert-Erik"
         };
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -63,20 +66,19 @@ namespace Lab6
                 chairs.Add(newChair);
             }
             chairs.CompleteAdding();
-
-            Thread.Sleep(1);
-
             
-            
-
             dirtyGlasses = new BlockingCollection<Glass>();
             guestsWaitingForBeer = new ConcurrentQueue<Guest>();
             guestsWaitingForSeat = new ConcurrentQueue<Guest>();
+
 
             timeTillBarCloses = 120;
             Bouncer bouncer = new Bouncer();
             bouncer.TheMainWindow = this;
             bouncer.LetGuestsIn();
+
+            bartender.TheMainWindow = this;
+            bartender.Start();
         }
     }
 }

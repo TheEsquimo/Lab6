@@ -64,6 +64,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bouncer.cs" />
+    <Compile Include="Bartender.cs" />
     <Compile Include="Chair.cs" />
     <Compile Include="Glass.cs" />
     <Compile Include="Guest.cs" />
