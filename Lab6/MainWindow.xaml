@@ -7,6 +7,22 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <ListBox x:Name="bartenderListBox" HorizontalAlignment="Left" Height="200" Margin="10,90,0,0" VerticalAlignment="Top" Width="150"/>
+        <ListBox x:Name="waiterListBox" HorizontalAlignment="Left" Height="200" Margin="213,90,0,0" VerticalAlignment="Top" Width="150"/>
+        <ListBox x:Name="patronListBox" HorizontalAlignment="Left" Height="200" Margin="414,90,0,0" VerticalAlignment="Top" Width="199"/>
+        <Label x:Name="bartenderLabel" Content="Bartender" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top" Width="150"/>
+        <Label x:Name="bartenderLabel_Copy" Content="Waiter" HorizontalAlignment="Left" Margin="213,59,0,0" VerticalAlignment="Top" Width="150"/>
+        <Label x:Name="bartenderLabel_Copy1" Content="Guests" HorizontalAlignment="Left" Margin="414,59,0,0" VerticalAlignment="Top" Width="201"/>
+        <Button x:Name="bartenderPauseContinueButton" Content="Pause/continue" HorizontalAlignment="Left" Margin="10,295,0,0" VerticalAlignment="Top" Width="150" Height="35"/>
+        <Button x:Name="waiterPauseContinueButton" Content="Pause/continue" HorizontalAlignment="Left" Margin="213,295,0,0" VerticalAlignment="Top" Width="150" Height="35"/>
+        <Button x:Name="guestsPauseContinueButton" Content="Pause/continue" HorizontalAlignment="Left" Margin="414,295,0,0" VerticalAlignment="Top" Width="199" Height="35"/>
+        <Button x:Name="button" Content="Open/close bar" HorizontalAlignment="Left" Margin="10,350,0,0" VerticalAlignment="Top" Width="603" Height="40"/>
+        <Button x:Name="button1" Content="Stop all threads" HorizontalAlignment="Left" Margin="644,295,0,0" VerticalAlignment="Top" Width="138" Height="35"/>
+        <Slider x:Name="simulationSpeedSlider" HorizontalAlignment="Left" Margin="644,372,0,0" VerticalAlignment="Top" Width="138"/>
+        <Label x:Name="simulationSpeedLabel" Content="Simulation Speed" HorizontalAlignment="Left" Margin="644,341,0,0" VerticalAlignment="Top" Width="138"/>
+        <Label x:Name="guestAmountLabel" Content="Guests: " HorizontalAlignment="Left" Margin="644,90,0,0" VerticalAlignment="Top" Width="138"/>
+        <Label x:Name="glassesAmountLabel" Content="Available glasses: " HorizontalAlignment="Left" Margin="644,150,0,0" VerticalAlignment="Top" Width="138"/>
+        <Label x:Name="availableSeatsAmountLabel" Content="Available seats: " HorizontalAlignment="Left" Margin="644,210,0,0" VerticalAlignment="Top" Width="138"/>
+        <Label x:Name="timeTillBarClosesLabel" Content="Time till bar closes: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" Height="26"/>
     </Grid>
 </Window>
