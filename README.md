@@ -17,6 +17,8 @@
 * ChairsList: 9 chairs
 * EmptyGlassesList
 * WaitressDishesList
+* GuestsWaitingForBeerQueue
+* GuestsWaitingForSeatQueue
   
 ## Agents
 > Sentences marked with **bold** are actions that should be displayed to the user through text
