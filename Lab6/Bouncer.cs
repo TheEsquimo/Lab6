@@ -16,17 +16,21 @@ namespace Lab6
 
         public void LetGuestsIn()
         {
-            if (TheMainWindow.timeTillBarCloses <= 0)
+            Task.Run(() =>
             {
-                TheMainWindow.patronListBox.Items.Insert(0, "Bouncer walks home");
-                return;
-            }
-            Thread.Sleep((random.Next(fastestGuestLetInTime, slowestGuestLetInTime)) * 1000);
-            int randomNameNumber = random.Next(TheMainWindow.guestNames.Count);
-            string nameOfNewGuest = TheMainWindow.guestNames[randomNameNumber];
-            Guest newGuest = new Guest(nameOfNewGuest);
-            TheMainWindow.guestsWaitingForBeer.Enqueue(newGuest);
-            LetGuestsIn();
+                if (TheMainWindow.timeTillBarCloses <= 0)
+                {
+                    TheMainWindow.guestListBox.Items.Insert(0, "Bouncer walks home");
+                    return;
+                }
+                Thread.Sleep((random.Next(fastestGuestLetInTime, slowestGuestLetInTime)) * 1000);
+                int randomNameNumber = random.Next(TheMainWindow.guestNames.Count);
+                string nameOfNewGuest = TheMainWindow.guestNames[randomNameNumber];
+                Guest newGuest = new Guest(nameOfNewGuest);
+                TheMainWindow.guests.Add(newGuest);
+                TheMainWindow.guestsWaitingForBeer.Enqueue(newGuest);
+                LetGuestsIn();
+            });
         }
     }
 }
