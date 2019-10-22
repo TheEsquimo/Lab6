@@ -2,5 +2,6 @@
 {
     internal class Chair
     {
+        internal Guest Guest { get; set; }
     }
 }
