@@ -35,7 +35,7 @@ namespace Lab6
             TheMainWindow.bartenderListBox.Items.Insert(0, waitForCustomerMessage);
             while (TheMainWindow.guestsWaitingForBeer.IsEmpty)
             {
-                Thread.Sleep(500);
+                Thread.Sleep(250);
             }
         }
 
@@ -43,7 +43,7 @@ namespace Lab6
         {
             while (TheMainWindow.glassShelf.Count <= 0)
             {
-                Thread.Sleep(500);
+                Thread.Sleep(250);
             }
             TheMainWindow.bartenderListBox.Items.Insert(0, fetchingGlassMessage);
             Thread.Sleep(fetchGlassTime * TheMainWindow.simulationSpeed);
