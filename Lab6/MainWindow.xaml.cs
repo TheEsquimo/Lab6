@@ -29,6 +29,7 @@ namespace Lab6
         internal BlockingCollection<Glass> glassShelf;
         internal BlockingCollection<Glass> dirtyGlasses;
         internal BlockingCollection<Chair> chairs;
+        internal BlockingCollection<Guest> guests;
         internal ConcurrentQueue<Guest> guestsWaitingForBeer;
         internal ConcurrentQueue<Guest> guestsWaitingForSeat;
         Bartender bartender = new Bartender();
@@ -66,7 +67,8 @@ namespace Lab6
                 chairs.Add(newChair);
             }
             chairs.CompleteAdding();
-            
+
+            guests = new BlockingCollection<Guest>();
             dirtyGlasses = new BlockingCollection<Glass>();
             guestsWaitingForBeer = new ConcurrentQueue<Guest>();
             guestsWaitingForSeat = new ConcurrentQueue<Guest>();
