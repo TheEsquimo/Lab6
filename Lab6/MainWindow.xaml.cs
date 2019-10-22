@@ -33,6 +33,7 @@ namespace Lab6
         internal ConcurrentQueue<Guest> guestsWaitingForBeer;
         internal ConcurrentQueue<Guest> guestsWaitingForSeat;
         Bartender bartender = new Bartender();
+        Waiter waiter = new Waiter();
         internal List<string> guestNames = new List<string>
         {
             "Bert",
@@ -72,7 +73,6 @@ namespace Lab6
             dirtyGlasses = new BlockingCollection<Glass>();
             guestsWaitingForBeer = new ConcurrentQueue<Guest>();
             guestsWaitingForSeat = new ConcurrentQueue<Guest>();
-
 
             timeTillBarCloses = 120;
             Bouncer bouncer = new Bouncer();
