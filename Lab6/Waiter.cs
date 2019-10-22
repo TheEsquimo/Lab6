@@ -41,7 +41,7 @@ namespace Lab6
             {
                 Glass dirtyGlass;
                 TheMainWindow.dirtyGlasses.TryTake(out dirtyGlass);
-                dirtyGlasses.Add(dirtyGlass);
+                dirtyGlasses.TryAdd(dirtyGlass);
             }
         }
 
