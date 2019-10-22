@@ -25,13 +25,13 @@
 
 > Whenever the time of actions are given, they should technically be theSpeedGiven * speedMultiplier
 ### Bartender
-* Has it's own thread
-* **Waits in the bar** for customer to show up
-* As soon as a customer arrives, **The bartender goes to the shelf** to pick up a glass
- * This action should take three seconds
-* Then he **Pours a glass of beer for the customer** and waits for the next customer again
- * This action should take three seconds
-* **Bartender goes home** when all the last customers have left
+* ~~Has it's own thread~~
+* ~~**Waits in the bar** for customer to show up~~
+* ~~As soon as a customer arrives, **The bartender goes to the shelf** to pick up a glass~~
+ * ~~This action should take three seconds~~
+* ~~Then he **Pours a glass of beer for the customer** and waits for the next customer again~~
+ * ~~This action should take three seconds~~
+* ~~**Bartender goes home** when all the last customers have left~~
 
 ### Waiter
 * GlassesList for dishes to be washed and then returned to the shelf
