@@ -34,15 +34,15 @@
 * ~~**Bartender goes home** when all the last customers have left~~
 
 ### Waiter
-* GlassesList for dishes to be washed and then returned to the shelf
+* ~~GlassesList for dishes to be washed and then returned to the shelf~~
 
 ROUTINE:
-* **Picks up empty glasses** that exist on the tables
- * This action takes ten seconds
-* Then she **Washes glasses**
- * This action takes fifteen seconds
-* Then she **Puts the glasses on the shelf**
-* **Waiter goes home** when all the last customers have left
+* ~~**Picks up empty glasses** that exist on the tables~~
+ * ~~This action takes ten seconds~~
+* ~~Then she **Washes glasses**~~
+ * ~~This action takes fifteen seconds~~
+* ~~Then she **Puts the glasses on the shelf**~~
+* ~~**Waiter goes home** when all the last customers have left~~
 
 ### Bouncer
 ROUTINE:
