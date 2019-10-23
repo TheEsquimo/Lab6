@@ -23,14 +23,15 @@ namespace Lab6
     public partial class MainWindow : Window
     {
         internal double timeTillBarCloses = 120;
+        internal int glassAmount = 8;
+        internal int seatAmount = 9;
+        internal int availableSeats;
         DateTime dateTimeStart;
         DateTime dateTimeLastUpdate;
-        int glassAmount = 8;
-        int chairAmount = 9;
         internal int simulationSpeed = 1;
         internal BlockingCollection<Glass> glassShelf;
         internal BlockingCollection<Glass> dirtyGlasses;
-        internal BlockingCollection<Seat> chairs;
+        internal BlockingCollection<Seat> seats;
         internal BlockingCollection<Guest> guests;
         internal ConcurrentQueue<Guest> guestsWaitingForBeer;
         internal ConcurrentQueue<Guest> guestsWaitingForSeat;
@@ -63,12 +64,18 @@ namespace Lab6
                 glassShelf.Add(newGlass);
             }
 
-            chairs = new BlockingCollection<Seat>();
-            for (int i = 0; i < chairAmount; i++)
+            seats = new BlockingCollection<Seat>();
+            for (int i = 0; i < seatAmount; i++)
             {
-                Seat newChair = new Seat();
-                chairs.Add(newChair);
+                Seat newSeat = new Seat();
+                seats.Add(newSeat);
             }
+            availableSeats = seatAmount;
+            LabelMessage(guestAmountLabel, $"Guests: 0");
+            LabelMessage(glassesAmountLabel, $"Available glasses: {glassShelf.Count}" +
+                                             $"\nTotal: {glassAmount}");
+            LabelMessage(availableSeatsAmountLabel, $"Available seats: {availableSeats}" +
+                                             $"\nTotal: {seatAmount}");
 
             guests = new BlockingCollection<Guest>();
             dirtyGlasses = new BlockingCollection<Glass>();
@@ -102,7 +109,14 @@ namespace Lab6
                 listBox.Items.Refresh();
             });
         }
-
+        
+        public void LabelMessage(Label label, string message)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                label.Content = message;
+            });
+        }
         public void UpdatePubTimer()
         {
             double elapsedTime = SecondsBetweenDates(dateTimeLastUpdate, DateTime.Now);
