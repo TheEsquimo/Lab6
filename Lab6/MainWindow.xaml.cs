@@ -30,7 +30,7 @@ namespace Lab6
         internal int simulationSpeed = 1;
         internal BlockingCollection<Glass> glassShelf;
         internal BlockingCollection<Glass> dirtyGlasses;
-        internal BlockingCollection<Chair> chairs;
+        internal BlockingCollection<Seat> chairs;
         internal BlockingCollection<Guest> guests;
         internal ConcurrentQueue<Guest> guestsWaitingForBeer;
         internal ConcurrentQueue<Guest> guestsWaitingForSeat;
@@ -63,10 +63,10 @@ namespace Lab6
                 glassShelf.Add(newGlass);
             }
 
-            chairs = new BlockingCollection<Chair>();
+            chairs = new BlockingCollection<Seat>();
             for (int i = 0; i < chairAmount; i++)
             {
-                Chair newChair = new Chair();
+                Seat newChair = new Seat();
                 chairs.Add(newChair);
             }
 

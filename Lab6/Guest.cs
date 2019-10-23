@@ -20,7 +20,7 @@ namespace Lab6
         public string Name { get; set; }
         public string Message { get; set; }
         internal Glass HeldGlass { get; set; }
-        internal Chair MyChair { get; set; }
+        internal Seat MyChair { get; set; }
         public MainWindow TheMainWindow { set; get; }
         public Guest(string name, MainWindow mainWindow)
         {
