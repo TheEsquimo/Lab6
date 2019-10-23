@@ -52,6 +52,26 @@ namespace Lab6
         public MainWindow()
         {
             InitializeComponent();
+            Random random = new Random();
+
+
+            /*
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    int randomNameNumber = random.Next(guestNames.Count);
+                    string nameOfNewGuest = guestNames[randomNameNumber];
+                    Guest newGuest = new Guest(nameOfNewGuest);
+                    Dispatcher.Invoke(() =>
+                    {
+                       guestListBox.Items.Insert(0, newGuest);
+                    });
+                    Thread.Sleep(1000);
+                }
+            });
+            */
+
 
             glassShelf = new BlockingCollection<Glass>();
             for (int i = 0; i < glassAmount; i++)
@@ -73,14 +93,12 @@ namespace Lab6
             dirtyGlasses = new BlockingCollection<Glass>();
             guestsWaitingForBeer = new ConcurrentQueue<Guest>();
             guestsWaitingForSeat = new ConcurrentQueue<Guest>();
-
             timeTillBarCloses = 120;
-            Bouncer bouncer = new Bouncer();
-            bouncer.TheMainWindow = this;
+            Bouncer bouncer = new Bouncer(this);
             bouncer.LetGuestsIn();
 
             bartender.TheMainWindow = this;
-            bartender.Start();
+            //bartender.Start();
         }
     }
 }
