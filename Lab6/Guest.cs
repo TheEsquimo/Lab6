@@ -11,9 +11,12 @@ namespace Lab6
         string searchForChairMessage = "Searching for a free chair";
         string sitDownMessage = "Sitting down and drinking beer";
         string finishedDrinkMessage = "Finished drink, leaving bar";
-        int minDrinkTime = 10;
-        int maxDrinkTime = 20;
         Random random = new Random();
+        int minDrinkTime = 1000;
+        int maxDrinkTime = 2000;
+        int timeToGetToBar = 1000;
+        int timeToGetToChair = 4000;
+
         public string Name { get; set; }
         public string Message { get; set; }
         internal Glass HeldGlass { get; set; }
@@ -40,11 +43,12 @@ namespace Lab6
         {
             Message = $"{Name}: {enterBarMessage}";
             TheMainWindow.ListBoxMessage(TheMainWindow.guestListBox, Message);
-            Thread.Sleep(1000);
+            Thread.Sleep(timeToGetToBar);
             while (HeldGlass == null) { Thread.Sleep(250); }
         }
         internal void SearchForAChair()
         {
+            TheMainWindow.guestsWaitingForSeat.Enqueue(this);
             Message = $"{Name}: {searchForChairMessage}";
             TheMainWindow.ListBoxMessage(TheMainWindow.guestListBox, Message);
             while (true)
@@ -57,7 +61,7 @@ namespace Lab6
                     {
                         chair.Guest = this;
                         MyChair = chair;
-                        Thread.Sleep(4000);
+                        Thread.Sleep(timeToGetToChair);
                         return;
                     }
                 }
@@ -66,9 +70,11 @@ namespace Lab6
         }
         internal void TakeASeat()
         {
+            Guest tempGuest = this;
+            TheMainWindow.guestsWaitingForSeat.TryDequeue(out tempGuest);
             Message = $"{Name}: {sitDownMessage}";
             TheMainWindow.ListBoxMessage(TheMainWindow.guestListBox, Message);
-            int drinkTime = random.Next((minDrinkTime * 1000), (maxDrinkTime * 1000));
+            int drinkTime = random.Next((minDrinkTime), (maxDrinkTime));
             Thread.Sleep(drinkTime);
         }
         internal void LeaveBar()
