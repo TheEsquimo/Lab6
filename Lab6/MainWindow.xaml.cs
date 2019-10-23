@@ -58,7 +58,6 @@ namespace Lab6
                 Glass newGlass = new Glass();
                 glassShelf.Add(newGlass);
             }
-            glassShelf.CompleteAdding();
 
             chairs = new BlockingCollection<Chair>();
             for (int i = 0; i < chairAmount; i++)
@@ -66,7 +65,6 @@ namespace Lab6
                 Chair newChair = new Chair();
                 chairs.Add(newChair);
             }
-            chairs.CompleteAdding();
 
             guests = new BlockingCollection<Guest>();
             dirtyGlasses = new BlockingCollection<Glass>();

@@ -45,6 +45,7 @@ namespace Lab6
         }
         internal void SearchForAChair()
         {
+            TheMainWindow.guestsWaitingForSeat.Enqueue(this);
             Message = $"{Name}: {searchForChairMessage}";
             TheMainWindow.ListBoxMessage(TheMainWindow.guestListBox, Message);
             while (true)
