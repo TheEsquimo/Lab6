@@ -9,10 +9,10 @@
     <Grid>
         <ListBox x:Name="bartenderListBox" HorizontalAlignment="Left" Height="200" Margin="10,90,0,0" VerticalAlignment="Top" Width="150"/>
         <ListBox x:Name="waiterListBox" HorizontalAlignment="Left" Height="200" Margin="213,90,0,0" VerticalAlignment="Top" Width="150"/>
-        <ListBox x:Name="patronListBox" HorizontalAlignment="Left" Height="200" Margin="414,90,0,0" VerticalAlignment="Top" Width="199"/>
+        <ListBox x:Name="guestListBox" HorizontalAlignment="Left" Height="200" Margin="414,90,0,0" VerticalAlignment="Top" Width="199"/>
         <Label x:Name="bartenderLabel" Content="Bartender" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top" Width="150"/>
-        <Label x:Name="bartenderLabel_Copy" Content="Waiter" HorizontalAlignment="Left" Margin="213,59,0,0" VerticalAlignment="Top" Width="150"/>
-        <Label x:Name="bartenderLabel_Copy1" Content="Guests" HorizontalAlignment="Left" Margin="414,59,0,0" VerticalAlignment="Top" Width="201"/>
+        <Label x:Name="waiterLabel" Content="Waiter" HorizontalAlignment="Left" Margin="213,59,0,0" VerticalAlignment="Top" Width="150"/>
+        <Label x:Name="guestsLabel" Content="Guests" HorizontalAlignment="Left" Margin="414,59,0,0" VerticalAlignment="Top" Width="201"/>
         <Button x:Name="bartenderPauseContinueButton" Content="Pause/continue" HorizontalAlignment="Left" Margin="10,295,0,0" VerticalAlignment="Top" Width="150" Height="35"/>
         <Button x:Name="waiterPauseContinueButton" Content="Pause/continue" HorizontalAlignment="Left" Margin="213,295,0,0" VerticalAlignment="Top" Width="150" Height="35"/>
         <Button x:Name="guestsPauseContinueButton" Content="Pause/continue" HorizontalAlignment="Left" Margin="414,295,0,0" VerticalAlignment="Top" Width="199" Height="35"/>
