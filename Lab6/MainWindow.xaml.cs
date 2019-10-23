@@ -52,25 +52,6 @@ namespace Lab6
             InitializeComponent();
             Random random = new Random();
 
-
-            /*
-            Task.Run(() =>
-            {
-                while (true)
-                {
-                    int randomNameNumber = random.Next(guestNames.Count);
-                    string nameOfNewGuest = guestNames[randomNameNumber];
-                    Guest newGuest = new Guest(nameOfNewGuest);
-                    Dispatcher.Invoke(() =>
-                    {
-                       guestListBox.Items.Insert(0, newGuest);
-                    });
-                    Thread.Sleep(1000);
-                }
-            });
-            */
-
-
             glassShelf = new BlockingCollection<Glass>();
             for (int i = 0; i < glassAmount; i++)
             {
@@ -98,6 +79,15 @@ namespace Lab6
             bartender.Start();
             Waiter waiter = new Waiter(this);
             waiter.Start();
+        }
+
+        public void ListBoxMessage(ListBox listBox, string message)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                listBox.Items.Insert(0, message);
+                listBox.Items.Refresh();
+            });
         }
     }
 }

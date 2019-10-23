@@ -39,10 +39,7 @@ namespace Lab6
 
         private void CollectDishes()
         {
-            Dispatcher.CurrentDispatcher.Invoke(() =>
-            {
-                TheMainWindow.waiterListBox.Items.Insert(0, collectingDishesMessage);
-            });
+            TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, collectingDishesMessage);
             while (TheMainWindow.dirtyGlasses.Count <= 0)
             {
                 Thread.Sleep(250);
@@ -58,10 +55,7 @@ namespace Lab6
 
         private void CleanDishes()
         {
-            Dispatcher.CurrentDispatcher.Invoke(() =>
-            {
-                TheMainWindow.waiterListBox.Items.Insert(0, cleaningDishesMessage);
-            });
+            TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, cleaningDishesMessage);
             Thread.Sleep(cleanDishesTime * TheMainWindow.simulationSpeed);
             foreach(Glass glass in dirtyGlasses)
             {
@@ -69,18 +63,12 @@ namespace Lab6
                 dirtyGlasses.TryTake(out cleanedGlass);
                 TheMainWindow.glassShelf.TryAdd(cleanedGlass);
             }
-            Dispatcher.CurrentDispatcher.Invoke(() =>
-            {
-                TheMainWindow.waiterListBox.Items.Insert(0, finishedCleaningMessage);
-            });
+            TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, finishedCleaningMessage);
         }
 
         private void GoHome()
         {
-            Dispatcher.CurrentDispatcher.Invoke(() =>
-            {
-                TheMainWindow.waiterListBox.Items.Insert(0, goHomeMessage);
-            });
+            TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, goHomeMessage);
         }
     }
 }
