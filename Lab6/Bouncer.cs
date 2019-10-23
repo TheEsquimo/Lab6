@@ -25,10 +25,7 @@ namespace Lab6
             {
                 if (TheMainWindow.timeTillBarCloses <= 0)
                 {
-                    Dispatcher.CurrentDispatcher.Invoke(() =>
-                    {
-                        TheMainWindow.guestListBox.Items.Insert(0, "Bouncer walks home");
-                    });
+                    TheMainWindow.ListBoxMessage(TheMainWindow.guestListBox, "Bouncer goes home");
                     return;
                 }
                 Thread.Sleep((random.Next(fastestGuestLetInTime, slowestGuestLetInTime)) * 100);

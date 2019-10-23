@@ -80,5 +80,14 @@ namespace Lab6
             Waiter waiter = new Waiter(this);
             waiter.Start();
         }
+
+        public void ListBoxMessage(ListBox listBox, string message)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                listBox.Items.Insert(0, message);
+                listBox.Items.Refresh();
+            });
+        }
     }
 }
