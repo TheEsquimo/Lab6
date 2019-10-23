@@ -9,13 +9,20 @@ namespace Lab6
     class Bartender
     {
         public MainWindow TheMainWindow { get; set; }
-        int fetchGlassTime = 3000;
-        int pourBeerTime = 3000;
+        int fetchGlassTime;
+        int pourBeerTime;
         string waitForCustomerMessage = "Waiting for customer";
         string fetchingGlassMessage = "Getting a glass from the shelf";
         string fillingGlassMessage = "Pouring a glass of beer";
         string goHomeMessage = "Bartender goes home";
         Glass heldGlass;
+
+        public Bartender(MainWindow mainWindow, int theFetchGlassTime = 3000, int thePourBeerTime = 3000)
+        {
+            TheMainWindow = mainWindow;
+            int fetchGlassTime = theFetchGlassTime;
+            int pourBeerTime = thePourBeerTime;
+        }
 
         public void Start()
         {
@@ -35,7 +42,7 @@ namespace Lab6
         {
             Dispatcher.CurrentDispatcher.Invoke(() =>
             {
-            TheMainWindow.bartenderListBox.Items.Insert(0, waitForCustomerMessage);
+                TheMainWindow.bartenderListBox.Items.Insert(0, waitForCustomerMessage);
             });
             while (TheMainWindow.guestsWaitingForBeer.IsEmpty)
             {

@@ -32,8 +32,6 @@ namespace Lab6
         internal BlockingCollection<Guest> guests;
         internal ConcurrentQueue<Guest> guestsWaitingForBeer;
         internal ConcurrentQueue<Guest> guestsWaitingForSeat;
-        Bartender bartender = new Bartender();
-        Waiter waiter = new Waiter();
         internal List<string> guestNames = new List<string>
         {
             "Bert",
@@ -75,13 +73,10 @@ namespace Lab6
             guestsWaitingForSeat = new ConcurrentQueue<Guest>();
 
             Bouncer bouncer = new Bouncer();
-            bouncer.TheMainWindow = this;
             bouncer.LetGuestsIn();
-
-            bartender.TheMainWindow = this;
+            Bartender bartender = new Bartender(this);
             bartender.Start();
-
-            waiter.TheMainWindow = this;
+            Waiter waiter = new Waiter(this);
             waiter.Start();
         }
     }
