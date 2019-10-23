@@ -26,8 +26,7 @@ namespace Lab6
 
         public void Start()
         {
-            Task.Run(() =>
-            {
+            Task.Run(() => {
                 while (TheMainWindow.timeTillBarCloses > 0 && TheMainWindow.guests.Count > 0)
                 {
                     WaitForCustomer();
@@ -40,10 +39,7 @@ namespace Lab6
 
         private void WaitForCustomer()
         {
-            Dispatcher.CurrentDispatcher.Invoke(() =>
-            {
-                TheMainWindow.bartenderListBox.Items.Insert(0, waitForCustomerMessage);
-            });
+            TheMainWindow.ListBoxMessage(TheMainWindow.bartenderListBox, waitForCustomerMessage);
             while (TheMainWindow.guestsWaitingForBeer.IsEmpty)
             {
                 Thread.Sleep(250);
@@ -56,20 +52,14 @@ namespace Lab6
             {
                 Thread.Sleep(250);
             }
-            Dispatcher.CurrentDispatcher.Invoke(() =>
-            {
-                TheMainWindow.bartenderListBox.Items.Insert(0, fetchingGlassMessage);
-            });
+            TheMainWindow.ListBoxMessage(TheMainWindow.bartenderListBox, fetchingGlassMessage);
             Thread.Sleep(fetchGlassTime * TheMainWindow.simulationSpeed);
             heldGlass = TheMainWindow.glassShelf.Take();
         }
 
         private void PourBeer()
         {
-            Dispatcher.CurrentDispatcher.Invoke(() =>
-            {
-                TheMainWindow.bartenderListBox.Items.Insert(0, fillingGlassMessage);
-            });
+            TheMainWindow.ListBoxMessage(TheMainWindow.bartenderListBox, fillingGlassMessage);
             Thread.Sleep(pourBeerTime * TheMainWindow.simulationSpeed);
             Guest guestToRecieveBeer;
             TheMainWindow.guestsWaitingForBeer.TryDequeue(out guestToRecieveBeer);
@@ -79,10 +69,7 @@ namespace Lab6
 
         private void GoHome()
         {
-            Dispatcher.CurrentDispatcher.Invoke(() =>
-            {
-                TheMainWindow.bartenderListBox.Items.Insert(0, goHomeMessage);
-            });
+            TheMainWindow.ListBoxMessage(TheMainWindow.bartenderListBox, goHomeMessage);
         }
     }
 }
