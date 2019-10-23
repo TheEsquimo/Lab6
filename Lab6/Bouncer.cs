@@ -28,14 +28,14 @@ namespace Lab6
                     TheMainWindow.ListBoxMessage(TheMainWindow.guestListBox, "Bouncer goes home");
                     return;
                 }
-                Thread.Sleep((random.Next(fastestGuestLetInTime, slowestGuestLetInTime)) * 100);
+                Thread.Sleep((random.Next(fastestGuestLetInTime, slowestGuestLetInTime)) * 1000);
                 int randomNameNumber = random.Next(TheMainWindow.guestNames.Count);
                 string nameOfNewGuest = TheMainWindow.guestNames[randomNameNumber];
                 Guest newGuest = new Guest(nameOfNewGuest, TheMainWindow);
                 TheMainWindow.guests.Add(newGuest);
                 TheMainWindow.guestsWaitingForBeer.Enqueue(newGuest);
                 newGuest.Start();
-                //LetGuestsIn();
+                LetGuestsIn();
             });
         }
     }
