@@ -46,7 +46,7 @@ namespace Lab6
                 Thread.Sleep(250);
             }
             TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, collectingDishesMessage);
-            Thread.Sleep(collectDishesTime * TheMainWindow.simulationSpeed);
+            Thread.Sleep(collectDishesTime / TheMainWindow.simulationSpeed);
             foreach(Glass glass in TheMainWindow.dirtyGlasses)
             {
                 Glass dirtyGlass;
@@ -58,7 +58,7 @@ namespace Lab6
         private void CleanDishes()
         {
             TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, cleaningDishesMessage);
-            Thread.Sleep(cleanDishesTime * TheMainWindow.simulationSpeed);
+            Thread.Sleep(cleanDishesTime / TheMainWindow.simulationSpeed);
             foreach(Glass glass in dirtyGlasses)
             {
                 Glass cleanedGlass = null;
