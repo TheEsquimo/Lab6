@@ -3,22 +3,9 @@
 # To-Do-List
 ### WPF ELEMENTS
 * When something happens an agent, make it readable in the corresponding ListBox
-  * Use Items.Insert to add text-messages, as opposed to Items.Add
-  * At the start of the text-message, there should be an "order number" or timestamp.
-  * The specific messages that should be displayed can be found under it's corresponding agent to-do-section
+  * At the start of the text-message, there should be a timestamp.
 * Add pause/continue buttons under each ListBox, tied to the corresponding processess //Optional, but helpful
 * Add "panic button" which stops all threads //Optional, but helpful
-
-### Shelf and Chairs
-* To represent the shelf and chairs; use threadsafe collection such as
-  * BlockingCollection
-  * ConcurrentQueue<T>
-* ShelfList: 8 glasses
-* ChairsList: 9 chairs
-* EmptyGlassesList
-* WaitressDishesList
-* GuestsWaitingForBeerQueue
-* GuestsWaitingForSeatQueue
   
 ## Agents
 > Sentences marked with **bold** are actions that should be displayed to the user through text
@@ -46,32 +33,37 @@ ROUTINE:
 
 ### Bouncer
 ROUTINE:
-* Lets in customers at random time-intervals
- * Three to ten seconds
-* Checks ID, basically giving the customer a random name from a list of predefined ones
-* The bouncer stops letting new customers in when the bar closes and **The bounces goes home**
+* ~~Lets in customers at random time-intervals~~
+ * ~~Three to ten seconds~~
+* ~~Checks ID, basically giving the customer a random name from a list of predefined ones~~
+* ~~The bouncer stops letting new customers in when the bar closes and **The bounces goes home**~~
 
 ### Patron
-string name
-Glass glass
+~~string name~~
+~~Glass glass~~
 
 ROUTINE:
-* **Customer enter pub** and goes directly to the bar
- * This action takes one second
-* Waits until the bartender gives beer
-* Then **Customer looks for an empty seat**
- * Getting to the seat takes four seconds
- * If there are no seats available, they wait until there is one
-* **Customer sits down** and drinks their beer
- * Finishing the beer takes between ten and twenty seconds (randomize)
-* When they are done with their beer, the **Customer leaves**
+* ~~**Customer enter pub** and goes directly to the bar~~
+ * ~~This action takes one second~~
+* ~~Waits until the bartender gives beer~~
+* ~~Then **Customer looks for an empty seat**~~
+ * ~~Getting to the seat takes four seconds~~
+ * ~~If there are no seats available, they wait until there is one~~
+* ~~**Customer sits down** and drinks their beer
+ * ~~Finishing the beer takes between ten and twenty seconds (randomize)~~
+* ~~When they are done with their beer, the **Customer leaves**~~
 
 ## Other classes
 ### Chair
-Guest currentSitter
+~~Guest currentSitter~~
 
 ### Glass
 
+## Other features
+* Simulation speed changable through UI in real-time in the form of slider
+* See the amount of customers in pub
+* See the amount of glasses available on shelf (and the total amount of glasses existent)
+* See the amount of seats available (and the total amount of seats existent)
 
 ## Testing
 * Test the application with different values of parameters
