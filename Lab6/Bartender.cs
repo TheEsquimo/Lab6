@@ -56,6 +56,8 @@ namespace Lab6
             TheMainWindow.ListBoxMessage(TheMainWindow.bartenderListBox, fetchingGlassMessage);
             Thread.Sleep(fetchGlassTime / TheMainWindow.simulationSpeed);
             heldGlass = TheMainWindow.glassShelf.Take();
+            TheMainWindow.LabelMessage(TheMainWindow.glassesAmountLabel, $"Available glasses: {TheMainWindow.glassShelf.Count}" +
+                                                                         $"\nTotal: {TheMainWindow.glassAmount}");
         }
 
         private void PourBeer()
