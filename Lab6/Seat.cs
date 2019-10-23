@@ -1,6 +1,6 @@
 ﻿namespace Lab6
 {
-    internal class Chair
+    internal class Seat
     {
         internal Guest Guest { get; set; }
     }

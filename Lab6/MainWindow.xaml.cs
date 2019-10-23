@@ -23,12 +23,13 @@ namespace Lab6
     public partial class MainWindow : Window
     {
         internal double timeTillBarCloses = 120;
-        int glassAmount = 8;
-        int chairAmount = 9;
+        internal int glassAmount = 8;
+        internal int seatAmount = 9;
+        internal int availableSeats;
         internal int simulationSpeed = 1;
         internal BlockingCollection<Glass> glassShelf;
         internal BlockingCollection<Glass> dirtyGlasses;
-        internal BlockingCollection<Chair> chairs;
+        internal BlockingCollection<Seat> chairs;
         internal BlockingCollection<Guest> guests;
         internal ConcurrentQueue<Guest> guestsWaitingForBeer;
         internal ConcurrentQueue<Guest> guestsWaitingForSeat;
@@ -59,12 +60,18 @@ namespace Lab6
                 glassShelf.Add(newGlass);
             }
 
-            chairs = new BlockingCollection<Chair>();
-            for (int i = 0; i < chairAmount; i++)
+            chairs = new BlockingCollection<Seat>();
+            for (int i = 0; i < seatAmount; i++)
             {
-                Chair newChair = new Chair();
-                chairs.Add(newChair);
+                Seat newSeat = new Seat();
+                chairs.Add(newSeat);
             }
+            availableSeats = seatAmount;
+            LabelMessage(guestAmountLabel, $"Guests: 0");
+            LabelMessage(glassesAmountLabel, $"Available glasses: {glassShelf.Count}" +
+                                             $"\nTotal: {glassAmount}");
+            LabelMessage(availableSeatsAmountLabel, $"Available seats: {availableSeats}" +
+                                             $"\nTotal: {seatAmount}");
 
             guests = new BlockingCollection<Guest>();
             dirtyGlasses = new BlockingCollection<Glass>();
@@ -85,6 +92,13 @@ namespace Lab6
             {
                 listBox.Items.Insert(0, message);
                 listBox.Items.Refresh();
+            });
+        }
+        public void LabelMessage(Label label, string message)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                label.Content = message;
             });
         }
     }

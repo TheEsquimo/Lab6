@@ -11,8 +11,8 @@ namespace Lab6
     class Bouncer
     {
         public MainWindow TheMainWindow { set; get; }
-        int fastestGuestLetInTime = 3;
-        int slowestGuestLetInTime = 10;
+        int fastestGuestLetInTime = 3000;
+        int slowestGuestLetInTime = 10000;
         Random random = new Random();
         
         public Bouncer(MainWindow mainWindow)
@@ -28,14 +28,15 @@ namespace Lab6
                     TheMainWindow.ListBoxMessage(TheMainWindow.guestListBox, "Bouncer goes home");
                     return;
                 }
-                Thread.Sleep((random.Next(fastestGuestLetInTime, slowestGuestLetInTime)) * 100);
+                Thread.Sleep((random.Next(fastestGuestLetInTime, slowestGuestLetInTime)) / TheMainWindow.simulationSpeed);
                 int randomNameNumber = random.Next(TheMainWindow.guestNames.Count);
                 string nameOfNewGuest = TheMainWindow.guestNames[randomNameNumber];
                 Guest newGuest = new Guest(nameOfNewGuest, TheMainWindow);
                 TheMainWindow.guests.Add(newGuest);
                 TheMainWindow.guestsWaitingForBeer.Enqueue(newGuest);
+                TheMainWindow.LabelMessage(TheMainWindow.guestAmountLabel, $"Guests: {TheMainWindow.guests.Count}");
                 newGuest.Start();
-                //LetGuestsIn();
+                LetGuestsIn();
             });
         }
     }

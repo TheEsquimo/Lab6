@@ -66,6 +66,8 @@ namespace Lab6
                 TheMainWindow.glassShelf.TryAdd(cleanedGlass);
             }
             TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, finishedCleaningMessage);
+            TheMainWindow.LabelMessage(TheMainWindow.glassesAmountLabel, $"Available glasses: {TheMainWindow.glassShelf.Count}" +
+                                                                         $"\nTotal: {TheMainWindow.glassAmount}");
         }
 
         private void GoHome()
