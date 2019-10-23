@@ -22,7 +22,7 @@ namespace Lab6
         public Guest(string name, MainWindow mainWindow)
         {
             Name = name;
-            HeldGlass = new Glass();
+            HeldGlass = null;
             TheMainWindow = mainWindow;
         }
 
@@ -31,7 +31,7 @@ namespace Lab6
             Task.Run(() =>
             {
                 EnterBar();
-                SearchForACHair();
+                SearchForAChair();
                 TakeASeat();
                 LeaveBar();
             });
@@ -42,10 +42,8 @@ namespace Lab6
             TheMainWindow.ListBoxMessage(TheMainWindow.guestListBox, Message);
             Thread.Sleep(1000);
             while (HeldGlass == null) { Thread.Sleep(250); }
-            var tempGuest = this;
-            TheMainWindow.guestsWaitingForBeer.TryDequeue(out tempGuest);
         }
-        internal void SearchForACHair()
+        internal void SearchForAChair()
         {
             Message = $"{Name}: {searchForChairMessage}";
             TheMainWindow.ListBoxMessage(TheMainWindow.guestListBox, Message);
