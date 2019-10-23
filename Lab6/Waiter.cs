@@ -2,20 +2,28 @@
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace Lab6
 {
     internal class Waiter
     {
-        MainWindow TheMainWindow { get; set; }
+        internal MainWindow TheMainWindow { get; set; }
         BlockingCollection<Glass> dirtyGlasses = new BlockingCollection<Glass>();
-        int collectDishesTime = 10000;
-        int cleanDishesTime = 15000;
+        int collectDishesTime;
+        int cleanDishesTime;
         string collectingDishesMessage = "Collecting dishes";
         string cleaningDishesMessage = "Cleaning dishes";
         string finishedCleaningMessage = "Put glasses back on shelf";
         string goHomeMessage = "Waiter goes home";
         
+        public Waiter(MainWindow mainWindow, int theCollectDishesTime = 10000, int theCleanDishesTime = 15000)
+        {
+            TheMainWindow = mainWindow;
+            int collectDishesTime = theCollectDishesTime;
+            int cleanDishesTime = theCleanDishesTime;
+        }
+
         public void Start()
         {
             Task.Run(() =>
@@ -31,12 +39,15 @@ namespace Lab6
 
         private void CollectDishes()
         {
-            TheMainWindow.waiterListBox.Items.Insert(0, collectingDishesMessage);
+            Dispatcher.CurrentDispatcher.Invoke(() =>
+            {
+                TheMainWindow.waiterListBox.Items.Insert(0, collectingDishesMessage);
+            });
             while (TheMainWindow.dirtyGlasses.Count <= 0)
             {
                 Thread.Sleep(250);
             }
-            Thread.Sleep(collectDishesTime);
+            Thread.Sleep(collectDishesTime * TheMainWindow.simulationSpeed);
             foreach(Glass glass in TheMainWindow.dirtyGlasses)
             {
                 Glass dirtyGlass;
@@ -47,20 +58,29 @@ namespace Lab6
 
         private void CleanDishes()
         {
-            TheMainWindow.waiterListBox.Items.Insert(0, cleaningDishesMessage);
-            Thread.Sleep(cleanDishesTime);
+            Dispatcher.CurrentDispatcher.Invoke(() =>
+            {
+                TheMainWindow.waiterListBox.Items.Insert(0, cleaningDishesMessage);
+            });
+            Thread.Sleep(cleanDishesTime * TheMainWindow.simulationSpeed);
             foreach(Glass glass in dirtyGlasses)
             {
                 Glass cleanedGlass;
                 dirtyGlasses.TryTake(out cleanedGlass);
                 TheMainWindow.glassShelf.TryAdd(cleanedGlass);
             }
-            TheMainWindow.waiterListBox.Items.Insert(0, finishedCleaningMessage);
+            Dispatcher.CurrentDispatcher.Invoke(() =>
+            {
+                TheMainWindow.waiterListBox.Items.Insert(0, finishedCleaningMessage);
+            });
         }
 
         private void GoHome()
         {
-            TheMainWindow.waiterListBox.Items.Insert(0, goHomeMessage);
+            Dispatcher.CurrentDispatcher.Invoke(() =>
+            {
+                TheMainWindow.waiterListBox.Items.Insert(0, goHomeMessage);
+            });
         }
     }
 }

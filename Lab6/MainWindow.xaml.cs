@@ -22,7 +22,7 @@ namespace Lab6
     /// </summary>
     public partial class MainWindow : Window
     {
-        internal double timeTillBarCloses;
+        internal double timeTillBarCloses = 120;
         int glassAmount = 8;
         int chairAmount = 9;
         internal int simulationSpeed = 1;
@@ -32,8 +32,6 @@ namespace Lab6
         internal BlockingCollection<Guest> guests;
         internal ConcurrentQueue<Guest> guestsWaitingForBeer;
         internal ConcurrentQueue<Guest> guestsWaitingForSeat;
-        Bartender bartender = new Bartender();
-        Waiter waiter = new Waiter();
         internal List<string> guestNames = new List<string>
         {
             "Bert",
@@ -74,13 +72,12 @@ namespace Lab6
             guestsWaitingForBeer = new ConcurrentQueue<Guest>();
             guestsWaitingForSeat = new ConcurrentQueue<Guest>();
 
-            timeTillBarCloses = 120;
             Bouncer bouncer = new Bouncer();
-            bouncer.TheMainWindow = this;
             bouncer.LetGuestsIn();
-
-            bartender.TheMainWindow = this;
+            Bartender bartender = new Bartender(this);
             bartender.Start();
+            Waiter waiter = new Waiter(this);
+            waiter.Start();
         }
     }
 }
