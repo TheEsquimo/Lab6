@@ -2,12 +2,13 @@
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace Lab6
 {
     internal class Waiter
     {
-        MainWindow TheMainWindow { get; set; }
+        internal MainWindow TheMainWindow { get; set; }
         BlockingCollection<Glass> dirtyGlasses = new BlockingCollection<Glass>();
         int collectDishesTime = 10000;
         int cleanDishesTime = 15000;
@@ -31,7 +32,10 @@ namespace Lab6
 
         private void CollectDishes()
         {
-            TheMainWindow.waiterListBox.Items.Insert(0, collectingDishesMessage);
+            Dispatcher.CurrentDispatcher.Invoke(() =>
+            {
+                TheMainWindow.waiterListBox.Items.Insert(0, collectingDishesMessage);
+            });
             while (TheMainWindow.dirtyGlasses.Count <= 0)
             {
                 Thread.Sleep(250);
@@ -47,7 +51,10 @@ namespace Lab6
 
         private void CleanDishes()
         {
-            TheMainWindow.waiterListBox.Items.Insert(0, cleaningDishesMessage);
+            Dispatcher.CurrentDispatcher.Invoke(() =>
+            {
+                TheMainWindow.waiterListBox.Items.Insert(0, cleaningDishesMessage);
+            });
             Thread.Sleep(cleanDishesTime * TheMainWindow.simulationSpeed);
             foreach(Glass glass in dirtyGlasses)
             {
@@ -55,12 +62,18 @@ namespace Lab6
                 dirtyGlasses.TryTake(out cleanedGlass);
                 TheMainWindow.glassShelf.TryAdd(cleanedGlass);
             }
-            TheMainWindow.waiterListBox.Items.Insert(0, finishedCleaningMessage);
+            Dispatcher.CurrentDispatcher.Invoke(() =>
+            {
+                TheMainWindow.waiterListBox.Items.Insert(0, finishedCleaningMessage);
+            });
         }
 
         private void GoHome()
         {
-            TheMainWindow.waiterListBox.Items.Insert(0, goHomeMessage);
+            Dispatcher.CurrentDispatcher.Invoke(() =>
+            {
+                TheMainWindow.waiterListBox.Items.Insert(0, goHomeMessage);
+            });
         }
     }
 }

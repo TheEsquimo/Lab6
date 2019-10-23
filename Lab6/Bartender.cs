@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace Lab6
 {
@@ -32,7 +33,10 @@ namespace Lab6
 
         private void WaitForCustomer()
         {
+            Dispatcher.CurrentDispatcher.Invoke(() =>
+            {
             TheMainWindow.bartenderListBox.Items.Insert(0, waitForCustomerMessage);
+            });
             while (TheMainWindow.guestsWaitingForBeer.IsEmpty)
             {
                 Thread.Sleep(250);
@@ -45,14 +49,20 @@ namespace Lab6
             {
                 Thread.Sleep(250);
             }
-            TheMainWindow.bartenderListBox.Items.Insert(0, fetchingGlassMessage);
+            Dispatcher.CurrentDispatcher.Invoke(() =>
+            {
+                TheMainWindow.bartenderListBox.Items.Insert(0, fetchingGlassMessage);
+            });
             Thread.Sleep(fetchGlassTime * TheMainWindow.simulationSpeed);
             heldGlass = TheMainWindow.glassShelf.Take();
         }
 
         private void PourBeer()
         {
-            TheMainWindow.bartenderListBox.Items.Insert(0, fillingGlassMessage);
+            Dispatcher.CurrentDispatcher.Invoke(() =>
+            {
+                TheMainWindow.bartenderListBox.Items.Insert(0, fillingGlassMessage);
+            });
             Thread.Sleep(pourBeerTime * TheMainWindow.simulationSpeed);
             Guest guestToRecieveBeer;
             TheMainWindow.guestsWaitingForBeer.TryDequeue(out guestToRecieveBeer);
@@ -62,7 +72,10 @@ namespace Lab6
 
         private void GoHome()
         {
-            TheMainWindow.bartenderListBox.Items.Insert(0, goHomeMessage);
+            Dispatcher.CurrentDispatcher.Invoke(() =>
+            {
+                TheMainWindow.bartenderListBox.Items.Insert(0, goHomeMessage);
+            });
         }
     }
 }
