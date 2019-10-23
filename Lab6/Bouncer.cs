@@ -35,7 +35,7 @@ namespace Lab6
                 TheMainWindow.guests.Add(newGuest);
                 TheMainWindow.guestsWaitingForBeer.Enqueue(newGuest);
                 newGuest.Start();
-                LetGuestsIn();
+                //LetGuestsIn();
             });
         }
     }

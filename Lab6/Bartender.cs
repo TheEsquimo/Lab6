@@ -20,8 +20,8 @@ namespace Lab6
         public Bartender(MainWindow mainWindow, int theFetchGlassTime = 3000, int thePourBeerTime = 3000)
         {
             TheMainWindow = mainWindow;
-            int fetchGlassTime = theFetchGlassTime;
-            int pourBeerTime = thePourBeerTime;
+            fetchGlassTime = theFetchGlassTime;
+            pourBeerTime = thePourBeerTime;
         }
 
         public void Start()

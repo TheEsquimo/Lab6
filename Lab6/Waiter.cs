@@ -20,8 +20,8 @@ namespace Lab6
         public Waiter(MainWindow mainWindow, int theCollectDishesTime = 10000, int theCleanDishesTime = 15000)
         {
             TheMainWindow = mainWindow;
-            int collectDishesTime = theCollectDishesTime;
-            int cleanDishesTime = theCleanDishesTime;
+            collectDishesTime = theCollectDishesTime;
+            cleanDishesTime = theCleanDishesTime;
         }
 
         public void Start()
