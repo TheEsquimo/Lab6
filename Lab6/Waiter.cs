@@ -12,6 +12,7 @@ namespace Lab6
         BlockingCollection<Glass> dirtyGlasses = new BlockingCollection<Glass>();
         int collectDishesTime;
         int cleanDishesTime;
+        string lookingForDishesMessage = "Looking for dishes";
         string collectingDishesMessage = "Collecting dishes";
         string cleaningDishesMessage = "Cleaning dishes";
         string finishedCleaningMessage = "Put glasses back on shelf";
@@ -39,11 +40,12 @@ namespace Lab6
 
         private void CollectDishes()
         {
-            TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, collectingDishesMessage);
+            TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, lookingForDishesMessage);
             while (TheMainWindow.dirtyGlasses.Count <= 0)
             {
                 Thread.Sleep(250);
             }
+            TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, collectingDishesMessage);
             Thread.Sleep(collectDishesTime * TheMainWindow.simulationSpeed);
             foreach(Glass glass in TheMainWindow.dirtyGlasses)
             {
@@ -59,7 +61,7 @@ namespace Lab6
             Thread.Sleep(cleanDishesTime * TheMainWindow.simulationSpeed);
             foreach(Glass glass in dirtyGlasses)
             {
-                Glass cleanedGlass;
+                Glass cleanedGlass = null;
                 dirtyGlasses.TryTake(out cleanedGlass);
                 TheMainWindow.glassShelf.TryAdd(cleanedGlass);
             }
