@@ -54,16 +54,16 @@ namespace Lab6
                 Thread.Sleep(250);
             }
             TheMainWindow.ListBoxMessage(TheMainWindow.bartenderListBox, fetchingGlassMessage);
-            Thread.Sleep(fetchGlassTime * TheMainWindow.simulationSpeed);
+            Thread.Sleep(fetchGlassTime / TheMainWindow.simulationSpeed);
             heldGlass = TheMainWindow.glassShelf.Take();
         }
 
         private void PourBeer()
         {
-            TheMainWindow.ListBoxMessage(TheMainWindow.bartenderListBox, fillingGlassMessage);
-            Thread.Sleep(pourBeerTime * TheMainWindow.simulationSpeed);
             Guest guestToRecieveBeer;
             TheMainWindow.guestsWaitingForBeer.TryDequeue(out guestToRecieveBeer);
+            TheMainWindow.ListBoxMessage(TheMainWindow.bartenderListBox, $"{fillingGlassMessage} for {guestToRecieveBeer.Name}");
+            Thread.Sleep(pourBeerTime / TheMainWindow.simulationSpeed);
             guestToRecieveBeer.HeldGlass = heldGlass;
             heldGlass = null;
         }

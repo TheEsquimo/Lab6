@@ -23,6 +23,8 @@ namespace Lab6
     public partial class MainWindow : Window
     {
         internal double timeTillBarCloses = 120;
+        DateTime dateTimeStart;
+        DateTime dateTimeLastUpdate;
         int glassAmount = 8;
         int chairAmount = 9;
         internal int simulationSpeed = 1;
@@ -51,6 +53,8 @@ namespace Lab6
         {
             InitializeComponent();
             Random random = new Random();
+            dateTimeStart = DateTime.Now;
+            dateTimeLastUpdate = DateTime.Now;
 
             glassShelf = new BlockingCollection<Glass>();
             for (int i = 0; i < glassAmount; i++)
@@ -77,15 +81,40 @@ namespace Lab6
             bartender.Start();
             Waiter waiter = new Waiter(this);
             waiter.Start();
+
+            Task.Run(() =>
+            {
+                while (timeTillBarCloses > 0)
+                {
+                    UpdatePubTimer();
+                    Thread.Sleep(1000);
+                }
+            });
         }
 
         public void ListBoxMessage(ListBox listBox, string message)
         {
+            double elapsedTime = SecondsBetweenDates(dateTimeStart, DateTime.Now);
+            elapsedTime = Math.Round(elapsedTime, 1, MidpointRounding.AwayFromZero);
             Dispatcher.Invoke(() =>
             {
-                listBox.Items.Insert(0, message);
+                listBox.Items.Insert(0, $"({elapsedTime}) {message}");
                 listBox.Items.Refresh();
             });
+        }
+
+        public void UpdatePubTimer()
+        {
+            double elapsedTime = SecondsBetweenDates(dateTimeLastUpdate, DateTime.Now);
+            timeTillBarCloses -= elapsedTime;
+            dateTimeLastUpdate = DateTime.Now;
+        }
+
+        public double SecondsBetweenDates(DateTime earlierTime, DateTime laterTime)
+        {
+            TimeSpan elapsedTime = (laterTime - earlierTime);
+            double elapsedTimeSeconds = elapsedTime.TotalSeconds;
+            return elapsedTimeSeconds;
         }
     }
 }
