@@ -26,8 +26,9 @@ namespace Lab6
 
         public void Start()
         {
-            Task.Run(() => {
-                while (TheMainWindow.timeTillBarCloses > 0 && TheMainWindow.guests.Count > 0)
+            Task.Run(() => 
+            {
+                while (TheMainWindow.timeTillBarCloses > 0 || TheMainWindow.guests.Count > 0)
                 {
                     WaitForCustomer();
                     FetchGlass();
