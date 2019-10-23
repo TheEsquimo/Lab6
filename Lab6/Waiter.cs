@@ -28,7 +28,7 @@ namespace Lab6
         {
             Task.Run(() =>
             {
-                while (TheMainWindow.timeTillBarCloses > 0 && TheMainWindow.guests.Count > 0)
+                while (TheMainWindow.timeTillBarCloses > 0 || TheMainWindow.guests.Count > 0)
                 {
                     CollectDishes();
                     CleanDishes();
