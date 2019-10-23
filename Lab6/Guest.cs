@@ -39,10 +39,7 @@ namespace Lab6
         internal void EnterBar()
         {
             Message = $"{Name}: {enterBarMessage}";
-            Dispatcher.CurrentDispatcher.Invoke(() =>
-            {
-                TheMainWindow.guestListBox.Items.Insert(0, Message);
-            });
+            TheMainWindow.ListBoxMessage(TheMainWindow.guestListBox, Message);
             Thread.Sleep(1000);
             while (HeldGlass == null) { Thread.Sleep(250); }
             var tempGuest = this;
@@ -51,10 +48,7 @@ namespace Lab6
         internal void SearchForACHair()
         {
             Message = $"{Name}: {searchForChairMessage}";
-            Dispatcher.CurrentDispatcher.Invoke(() =>
-            {
-                TheMainWindow.guestListBox.Items.Refresh();
-            });
+            TheMainWindow.ListBoxMessage(TheMainWindow.guestListBox, Message);
             while (true)
             {
                 foreach (var chair in TheMainWindow.chairs)
@@ -75,20 +69,14 @@ namespace Lab6
         internal void TakeASeat()
         {
             Message = $"{Name}: {sitDownMessage}";
-            Dispatcher.CurrentDispatcher.Invoke(() =>
-            {
-                TheMainWindow.guestListBox.Items.Refresh();
-            });
+            TheMainWindow.ListBoxMessage(TheMainWindow.guestListBox, Message);
             int drinkTime = random.Next((minDrinkTime * 1000), (maxDrinkTime * 1000));
             Thread.Sleep(drinkTime);
         }
         internal void LeaveBar()
         {
             Message = $"{Name}: {finishedDrinkMessage}";
-            Dispatcher.CurrentDispatcher.Invoke(() =>
-            {
-                TheMainWindow.guestListBox.Items.Refresh();
-            });
+            TheMainWindow.ListBoxMessage(TheMainWindow.guestListBox, Message);
             MyChair.Guest = null;
             TheMainWindow.dirtyGlasses.TryAdd(HeldGlass);
             HeldGlass = null;

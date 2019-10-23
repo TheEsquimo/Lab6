@@ -52,25 +52,6 @@ namespace Lab6
             InitializeComponent();
             Random random = new Random();
 
-
-            /*
-            Task.Run(() =>
-            {
-                while (true)
-                {
-                    int randomNameNumber = random.Next(guestNames.Count);
-                    string nameOfNewGuest = guestNames[randomNameNumber];
-                    Guest newGuest = new Guest(nameOfNewGuest);
-                    Dispatcher.Invoke(() =>
-                    {
-                       guestListBox.Items.Insert(0, newGuest);
-                    });
-                    Thread.Sleep(1000);
-                }
-            });
-            */
-
-
             glassShelf = new BlockingCollection<Glass>();
             for (int i = 0; i < glassAmount; i++)
             {
