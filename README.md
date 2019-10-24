@@ -62,7 +62,7 @@ ROUTINE:
 ## Other features
 * Simulation speed changable through UI in real-time in the form of slider
 * ~~Pub open-timer~~
- * Time left till closing shown through UI
+ * ~~Time left till closing shown through UI~~
  * Amount of time to be open customizable through UI (not required)
 * ~~See the amount of customers in pub~~
 * ~~See the amount of glasses available on shelf (and the total amount of glasses existent)~~
