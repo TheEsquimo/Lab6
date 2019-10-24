@@ -11,6 +11,7 @@ namespace Lab6
         public MainWindow TheMainWindow { get; set; }
         int fetchGlassTime;
         int pourBeerTime;
+        bool waitForCustomerMessageSent = false;
         string waitForCustomerMessage = "Waiting for customer";
         string fetchingGlassMessage = "Getting a glass from the shelf";
         string fillingGlassMessage = "Pouring a glass of beer";
@@ -30,20 +31,32 @@ namespace Lab6
             {
                 while (TheMainWindow.timeTillBarCloses > 0 || TheMainWindow.guests.Count > 0)
                 {
-                    WaitForCustomer();
-                    FetchGlass();
-                    PourBeer();
+                    if (!WaitForCustomer())
+                    {
+                        waitForCustomerMessageSent = false;
+                        FetchGlass();
+                        PourBeer();
+                    }
                 }
                 GoHome();
             });
         }
 
-        private void WaitForCustomer()
+        private bool WaitForCustomer()
         {
-            TheMainWindow.ListBoxMessage(TheMainWindow.bartenderListBox, waitForCustomerMessage);
-            while (TheMainWindow.guestsWaitingForBeer.IsEmpty)
+            if (TheMainWindow.guestsWaitingForBeer.IsEmpty)
             {
+                if (!waitForCustomerMessageSent)
+                {
+                    TheMainWindow.ListBoxMessage(TheMainWindow.bartenderListBox, waitForCustomerMessage);
+                    waitForCustomerMessageSent = true;
+                }
                 Thread.Sleep(250);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 

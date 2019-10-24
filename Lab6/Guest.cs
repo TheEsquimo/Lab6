@@ -8,19 +8,19 @@ namespace Lab6
     public class Guest
     {
         string enterBarMessage = "Entering the pub, heading to the bar";
-        string searchForChairMessage = "Searching for a free chair";
+        string searchForSeatMessage = "Searching for a free seat";
         string sitDownMessage = "Sitting down and drinking beer";
         string finishedDrinkMessage = "Finished drink, leaving bar";
         Random random = new Random();
         int timeToGetToBar = 1000;
-        int timeToGetToChair = 4000;
+        int timeToGetToSeat = 4000;
         int minDrinkTime = 10000;
         int maxDrinkTime = 20000;
         
         public string Name { get; set; }
         public string Message { get; set; }
         internal Glass HeldGlass { get; set; }
-        internal Seat MyChair { get; set; }
+        internal Seat MySeat { get; set; }
         public MainWindow TheMainWindow { set; get; }
         public Guest(string name, MainWindow mainWindow)
         {
@@ -34,7 +34,7 @@ namespace Lab6
             Task.Run(() =>
             {
                 EnterBar();
-                SearchForAChair();
+                SearchForASeat();
                 TakeASeat();
                 LeaveBar();
             });
@@ -46,21 +46,21 @@ namespace Lab6
             Thread.Sleep(timeToGetToBar / TheMainWindow.simulationSpeed);
             while (HeldGlass == null) { Thread.Sleep(250); }
         }
-        internal void SearchForAChair()
+        internal void SearchForASeat()
         {
             TheMainWindow.guestsWaitingForSeat.Enqueue(this);
-            Message = $"{Name}: {searchForChairMessage}";
+            Message = $"{Name}: {searchForSeatMessage}";
             TheMainWindow.ListBoxMessage(TheMainWindow.guestListBox, Message);
             while (true)
             {
-                foreach (var chair in TheMainWindow.seats)
+                foreach (var seat in TheMainWindow.seats)
                 {
                     Guest tempGuest;
                     TheMainWindow.guestsWaitingForSeat.TryPeek(out tempGuest);
-                    if (chair.Guest == null && this == tempGuest)
+                    if (seat.Guest == null && this == tempGuest)
                     {
-                        chair.Guest = this;
-                        MyChair = chair;
+                        seat.Guest = this;
+                        MySeat = seat;
                         return;
                     }
                 }
@@ -69,7 +69,7 @@ namespace Lab6
         }
         internal void TakeASeat()
         {
-            Thread.Sleep(timeToGetToChair / TheMainWindow.simulationSpeed);
+            Thread.Sleep(timeToGetToSeat / TheMainWindow.simulationSpeed);
             TheMainWindow.availableSeats--;
             TheMainWindow.LabelMessage(TheMainWindow.availableSeatsAmountLabel, $"Available seats: {TheMainWindow.availableSeats}" +
                                              $"\nTotal: {TheMainWindow.seatAmount}");
@@ -84,7 +84,7 @@ namespace Lab6
         {
             Message = $"{Name}: {finishedDrinkMessage}";
             TheMainWindow.ListBoxMessage(TheMainWindow.guestListBox, Message);
-            MyChair.Guest = null;
+            MySeat.Guest = null;
             TheMainWindow.dirtyGlasses.TryAdd(HeldGlass);
             HeldGlass = null;
             Guest tempGuest = this;
