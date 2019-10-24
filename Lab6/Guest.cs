@@ -53,7 +53,7 @@ namespace Lab6
             TheMainWindow.ListBoxMessage(TheMainWindow.guestListBox, Message);
             while (true)
             {
-                foreach (var chair in TheMainWindow.chairs)
+                foreach (var chair in TheMainWindow.seats)
                 {
                     Guest tempGuest;
                     TheMainWindow.guestsWaitingForSeat.TryPeek(out tempGuest);
