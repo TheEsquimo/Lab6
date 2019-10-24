@@ -21,7 +21,7 @@ namespace Lab6
         }
         public void LetGuestsIn()
         {
-            Task.Run(() =>
+            Task thisTask = Task.Run(() =>
             {
                 if (TheMainWindow.timeTillBarCloses <= 0)
                 {
@@ -29,15 +29,19 @@ namespace Lab6
                     return;
                 }
                 Thread.Sleep((random.Next(fastestGuestLetInTime, slowestGuestLetInTime)) / TheMainWindow.simulationSpeed);
-                int randomNameNumber = random.Next(TheMainWindow.guestNames.Count);
-                string nameOfNewGuest = TheMainWindow.guestNames[randomNameNumber];
-                Guest newGuest = new Guest(nameOfNewGuest, TheMainWindow);
-                TheMainWindow.guests.Add(newGuest);
-                TheMainWindow.guestsWaitingForBeer.Enqueue(newGuest);
-                TheMainWindow.LabelMessage(TheMainWindow.guestAmountLabel, $"Guests: {TheMainWindow.guests.Count}");
-                newGuest.Start();
+                if (TheMainWindow.timeTillBarCloses > 0)
+                {
+                    int randomNameNumber = random.Next(TheMainWindow.guestNames.Count);
+                    string nameOfNewGuest = TheMainWindow.guestNames[randomNameNumber];
+                    Guest newGuest = new Guest(nameOfNewGuest, TheMainWindow);
+                    TheMainWindow.guests.Add(newGuest);
+                    TheMainWindow.guestsWaitingForBeer.Enqueue(newGuest);
+                    TheMainWindow.LabelMessage(TheMainWindow.guestAmountLabel, $"Guests: {TheMainWindow.guests.Count}");
+                    newGuest.Start();
+                }
                 LetGuestsIn();
             });
+            TheMainWindow.activeTasks.Add(thisTask);
         }
     }
 }
