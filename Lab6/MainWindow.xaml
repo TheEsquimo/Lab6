@@ -13,7 +13,7 @@
         <Label x:Name="bartenderLabel" Content="Bartender" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top" Width="150"/>
         <Label x:Name="waiterLabel" Content="Waiter" HorizontalAlignment="Left" Margin="213,59,0,0" VerticalAlignment="Top" Width="150"/>
         <Label x:Name="guestsLabel" Content="Guests" HorizontalAlignment="Left" Margin="414,59,0,0" VerticalAlignment="Top" Width="201"/>
-        <Button x:Name="openCloseBarButton" Content="Open bar" HorizontalAlignment="Left" Margin="10,316,0,0" VerticalAlignment="Top" Width="603" Height="40"/>
+        <Button x:Name="openCloseBarButton" Content="Open bar" HorizontalAlignment="Left" Margin="155,316,0,0" VerticalAlignment="Top" Width="399" Height="40"/>
         <Slider x:Name="simulationSpeedSlider" HorizontalAlignment="Left" Margin="644,338,0,0" VerticalAlignment="Top" Width="138"/>
         <Label x:Name="simulationSpeedLabel" Content="Simulation Speed" HorizontalAlignment="Left" Margin="644,307,0,0" VerticalAlignment="Top" Width="138"/>
         <Label x:Name="guestAmountLabel" Content="Guests: " HorizontalAlignment="Left" Margin="644,119,0,0" VerticalAlignment="Top" Width="138"/>
