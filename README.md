@@ -60,7 +60,7 @@ ROUTINE:
 ### Glass
 
 ## Other features
-* Simulation speed changable through UI in real-time in the form of slider
+* ~~Simulation speed changable through UI in real-time in the form of slider~~
 * ~~Pub open-timer~~
  * ~~Time left till closing shown through UI~~
  * Amount of time to be open customizable through UI (not required)
@@ -70,9 +70,9 @@ ROUTINE:
 
 ## Testing
 * Test the application with different values of parameters
- * Standard values
- * 20 glasses, 3 chairs
- * 5 glasses, 20 chairs
+ * ~~Standard values~~
+ * ~~20 glasses, 3 chairs~~
+ * ~~5 glasses, 20 chairs~~
  * Guests stays double the amount of time
  * The waiter picks up and does the dishes at twice the speed
  * The bar is open for five minutes or longer
