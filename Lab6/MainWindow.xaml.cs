@@ -77,6 +77,7 @@ namespace Lab6
         {
             simulationInitiated = true;
             activeTasks = new BlockingCollection<Task>();
+            simulationSpeedSlider.ValueChanged += SimulationSpeedValueChanged;
             Random random = new Random();
             dateTimeStart = DateTime.Now;
             dateTimeLastUpdate = DateTime.Now;
@@ -148,6 +149,11 @@ namespace Lab6
                 if (!task.IsCompleted) { tasksCompleted = false; }
             }
             return tasksCompleted;
+        }
+        
+        private void SimulationSpeedValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            simulationSpeed = (int)simulationSpeedSlider.Value;
         }
 
         public void ListBoxMessage(ListBox listBox, string message)
