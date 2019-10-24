@@ -62,11 +62,13 @@ namespace Lab6
         {
             if (!simulationInitiated)
             {
+                openCloseBarButton.Content = "Close bar";
                 InitiateSimulation();
             }
             else
             {
                 openCloseBarButton.IsEnabled = false;
+                openCloseBarButton.Content = "Finishing up for the day";
                 timeTillBarCloses = 0;
             }
         }
@@ -124,25 +126,28 @@ namespace Lab6
             {
                 while (simulationInitiated)
                 {
-                    if (timeTillBarCloses <= 0)
+                    if (timeTillBarCloses <= 0 && AreTasksComplete())
                     {
-                        bool tasksCompleted = true;
-                        foreach (Task task in activeTasks)
+                        simulationInitiated = false;
+                        Dispatcher.Invoke(() =>
                         {
-                            if (!task.IsCompleted) { tasksCompleted = false; }
-                        }
-                        if (tasksCompleted)
-                        {
-                            simulationInitiated = false;
-                            Dispatcher.Invoke(() =>
-                            {
-                                openCloseBarButton.IsEnabled = true;
-                            });
-                        }
+                            openCloseBarButton.IsEnabled = true;
+                            openCloseBarButton.Content = "Open bar";
+                        });
                     }
                     Thread.Sleep(250 / simulationSpeed);
                 }
             });
+        }
+
+        private bool AreTasksComplete()
+        {
+            bool tasksCompleted = true;
+            foreach (Task task in activeTasks)
+            {
+                if (!task.IsCompleted) { tasksCompleted = false; }
+            }
+            return tasksCompleted;
         }
 
         public void ListBoxMessage(ListBox listBox, string message)

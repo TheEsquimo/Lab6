@@ -44,7 +44,7 @@ namespace Lab6
             TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, lookingForDishesMessage);
             while (TheMainWindow.dirtyGlasses.Count <= 0)
             {
-                if (TheMainWindow.timeTillBarCloses <= 0) { return; }
+                if (TheMainWindow.timeTillBarCloses <= 0 && TheMainWindow.guests.Count <= 0) { return; }
                 Thread.Sleep(250);
             }
             TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, collectingDishesMessage);
