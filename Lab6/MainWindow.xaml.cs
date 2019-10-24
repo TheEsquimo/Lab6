@@ -121,6 +121,7 @@ namespace Lab6
         {
             double elapsedTime = SecondsBetweenDates(dateTimeLastUpdate, DateTime.Now);
             timeTillBarCloses -= elapsedTime;
+            LabelMessage(timeTillBarClosesLabel, "Time till bar closes: " + (int)timeTillBarCloses);
             dateTimeLastUpdate = DateTime.Now;
         }
 
