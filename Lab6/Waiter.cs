@@ -44,6 +44,7 @@ namespace Lab6
             TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, lookingForDishesMessage);
             while (TheMainWindow.dirtyGlasses.Count <= 0)
             {
+                if (TheMainWindow.timeTillBarCloses <= 0) { return; }
                 Thread.Sleep(250);
             }
             TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, collectingDishesMessage);
@@ -58,17 +59,20 @@ namespace Lab6
 
         private void CleanDishes()
         {
-            TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, cleaningDishesMessage);
-            Thread.Sleep(cleanDishesTime / TheMainWindow.simulationSpeed);
-            foreach(Glass glass in dirtyGlasses)
+            if (dirtyGlasses.Count > 0)
             {
-                Glass cleanedGlass = null;
-                dirtyGlasses.TryTake(out cleanedGlass);
-                TheMainWindow.glassShelf.TryAdd(cleanedGlass);
+                TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, cleaningDishesMessage);
+                Thread.Sleep(cleanDishesTime / TheMainWindow.simulationSpeed);
+                foreach(Glass glass in dirtyGlasses)
+                {
+                    Glass cleanedGlass = null;
+                    dirtyGlasses.TryTake(out cleanedGlass);
+                    TheMainWindow.glassShelf.TryAdd(cleanedGlass);
+                }
+                TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, finishedCleaningMessage);
+                TheMainWindow.LabelMessage(TheMainWindow.glassesAmountLabel, $"Available glasses: {TheMainWindow.glassShelf.Count}" +
+                                                                             $"\nTotal: {TheMainWindow.glassAmount}");
             }
-            TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, finishedCleaningMessage);
-            TheMainWindow.LabelMessage(TheMainWindow.glassesAmountLabel, $"Available glasses: {TheMainWindow.glassShelf.Count}" +
-                                                                         $"\nTotal: {TheMainWindow.glassAmount}");
         }
 
         private void GoHome()
