@@ -63,6 +63,8 @@ namespace Lab6
             if (!simulationInitiated)
             {
                 openCloseBarButton.Content = "Close bar";
+                simulationSpeedSlider.IsEnabled = true;
+                simulationSpeedValueTextBox.IsEnabled = true;
                 InitiateSimulation();
             }
             else
@@ -134,6 +136,8 @@ namespace Lab6
                         {
                             openCloseBarButton.IsEnabled = true;
                             openCloseBarButton.Content = "Open bar";
+                            simulationSpeedSlider.IsEnabled = false;
+                            simulationSpeedValueTextBox.IsEnabled = false;
                         });
                     }
                     Thread.Sleep(250 / simulationSpeed);
@@ -177,7 +181,7 @@ namespace Lab6
         public void UpdatePubTimer()
         {
             double elapsedTime = SecondsBetweenDates(dateTimeLastUpdate, DateTime.Now);
-            timeTillBarCloses -= elapsedTime;
+            timeTillBarCloses -= elapsedTime * simulationSpeed;
             dateTimeLastUpdate = DateTime.Now;
             LabelMessage(timeTillBarClosesLabel, "Time till bar closes: " + (int)timeTillBarCloses);
         }

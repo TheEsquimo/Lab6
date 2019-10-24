@@ -14,18 +14,12 @@
         <Label x:Name="waiterLabel" Content="Waiter" HorizontalAlignment="Left" Margin="213,59,0,0" VerticalAlignment="Top" Width="150"/>
         <Label x:Name="guestsLabel" Content="Guests" HorizontalAlignment="Left" Margin="414,59,0,0" VerticalAlignment="Top" Width="201"/>
         <Button x:Name="openCloseBarButton" Content="Open bar" HorizontalAlignment="Left" Margin="155,316,0,0" VerticalAlignment="Top" Width="399" Height="40"/>
-        <Slider x:Name="simulationSpeedSlider" HorizontalAlignment="Left" Margin="644,338,0,0" VerticalAlignment="Top" Width="138"/>
-        <Label x:Name="simulationSpeedLabel" Content="Simulation Speed" HorizontalAlignment="Left" Margin="644,307,0,0" VerticalAlignment="Top" Width="138"/>
-        <Label x:Name="guestAmountLabel" Content="Guests: " HorizontalAlignment="Left" Margin="644,119,0,0" VerticalAlignment="Top" Width="138"/>
-        <Label x:Name="glassesAmountLabel" Content="Available glasses:  &#xD;&#xA;Total:" HorizontalAlignment="Left" Margin="644,150,0,0" VerticalAlignment="Top" Width="138" Height="45"/>
-        <Label x:Name="availableSeatsAmountLabel" Content="Available seats: &#xD;&#xA;Total: " HorizontalAlignment="Left" Margin="644,200,0,0" VerticalAlignment="Top" Width="138" Height="45"/>
-        <Label x:Name="timeTillBarClosesLabel" Content="Time till bar closes: " HorizontalAlignment="Left" Margin="10,28,0,0" VerticalAlignment="Top" Width="150" Height="26"/>
-        <Slider x:Name="simulationSpeedSlider" HorizontalAlignment="Left" Margin="644,372,0,0" VerticalAlignment="Top" Width="138" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Value="1" Minimum="1"/>
+        <Slider x:Name="simulationSpeedSlider" HorizontalAlignment="Left" Margin="644,372,0,0" VerticalAlignment="Top" Width="138" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Value="1" Minimum="1" IsEnabled="False"/>
         <Label x:Name="simulationSpeedLabel" Content="Simulation Speed" HorizontalAlignment="Left" Margin="644,341,0,0" VerticalAlignment="Top" Width="104"/>
         <Label x:Name="guestAmountLabel" Content="Guests: " HorizontalAlignment="Left" Margin="644,90,0,0" VerticalAlignment="Top" Width="138"/>
         <Label x:Name="glassesAmountLabel" Content="Available glasses:  &#xD;&#xA;Total:" HorizontalAlignment="Left" Margin="644,150,0,0" VerticalAlignment="Top" Width="138" Height="55"/>
         <Label x:Name="availableSeatsAmountLabel" Content="Available seats: &#xD;&#xA;Total: " HorizontalAlignment="Left" Margin="644,210,0,0" VerticalAlignment="Top" Width="138"/>
         <Label x:Name="timeTillBarClosesLabel" Content="Time till bar closes: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" Height="26"/>
-        <TextBox x:Name="simulationSpeedValueLabel" HorizontalAlignment="Left" Height="26" Margin="753,341,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="29" Text="{Binding ElementName=simulationSpeedSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" SelectionOpacity="1"/>
+        <TextBox x:Name="simulationSpeedValueTextBox" HorizontalAlignment="Left" Height="26" Margin="753,341,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="29" Text="{Binding ElementName=simulationSpeedSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" SelectionOpacity="1" IsEnabled="False"/>
     </Grid>
 </Window>
