@@ -18,8 +18,12 @@
         <Label x:Name="simulationSpeedLabel" Content="Simulation Speed" HorizontalAlignment="Left" Margin="644,341,0,0" VerticalAlignment="Top" Width="104"/>
         <Label x:Name="guestAmountLabel" Content="Guests: " HorizontalAlignment="Left" Margin="644,90,0,0" VerticalAlignment="Top" Width="138"/>
         <Label x:Name="glassesAmountLabel" Content="Available glasses:  &#xD;&#xA;Total:" HorizontalAlignment="Left" Margin="644,150,0,0" VerticalAlignment="Top" Width="138" Height="55"/>
-        <Label x:Name="availableSeatsAmountLabel" Content="Available seats: &#xD;&#xA;Total: " HorizontalAlignment="Left" Margin="644,210,0,0" VerticalAlignment="Top" Width="138"/>
-        <Label x:Name="timeTillBarClosesLabel" Content="Time till bar closes: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" Height="26"/>
+        <Label x:Name="availableSeatsAmountLabel" Content="Available seats: &#xD;&#xA;Total: " HorizontalAlignment="Left" Margin="644,210,0,0" VerticalAlignment="Top" Width="138" Height="57"/>
+        <Label x:Name="timeTillBarClosesLabel" Content="Time till bar closes: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="132" Height="26"/>
         <TextBox x:Name="simulationSpeedValueTextBox" HorizontalAlignment="Left" Height="26" Margin="753,341,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="29" Text="{Binding ElementName=simulationSpeedSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" SelectionOpacity="1" IsEnabled="False"/>
+        <TextBox x:Name="glassesAmountTextBox" HorizontalAlignment="Left" Height="19" Margin="678,171,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="42"/>
+        <TextBox HorizontalAlignment="Left" Height="26" Margin="227,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+
+        <TextBox x:Name="seatsAmountTextBox" HorizontalAlignment="Left" Height="19" Margin="678,231,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="37"/>
     </Grid>
 </Window>

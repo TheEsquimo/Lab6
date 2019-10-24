@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,13 +24,16 @@ namespace Lab6
     public partial class MainWindow : Window
     {
         public bool simulationInitiated = false;
-        internal double timeTillBarCloses = 25;
-        internal int glassAmount = 8;
-        internal int seatAmount = 9;
+        internal const double timeTillBarClosesStandard = 120;
+        internal const int glassAmountStandard = 8;
+        internal const int seatAmountStandard = 9;
+        internal double timeTillBarCloses;
+        internal int glassAmount;
+        internal int seatAmount;
         internal int availableSeats;
+        internal int simulationSpeed = 1;
         DateTime dateTimeStart;
         DateTime dateTimeLastUpdate;
-        internal int simulationSpeed = 1;
         internal BlockingCollection<Task> activeTasks;
         internal BlockingCollection<Glass> glassShelf;
         internal BlockingCollection<Glass> dirtyGlasses;
@@ -62,9 +66,7 @@ namespace Lab6
         {
             if (!simulationInitiated)
             {
-                openCloseBarButton.Content = "Close bar";
-                simulationSpeedSlider.IsEnabled = true;
-                simulationSpeedValueTextBox.IsEnabled = true;
+                UISettingsOnBarOpen();
                 InitiateSimulation();
             }
             else
@@ -78,6 +80,20 @@ namespace Lab6
         public void InitiateSimulation()
         {
             simulationInitiated = true;
+            int result;
+            var glassMatch = Regex.Match(glassesAmountTextBox.Text, @"^[1-9][0-9]*$");
+            if (glassMatch.Success && int.TryParse(glassesAmountTextBox.Text, out result))
+            {
+                glassAmount = result;
+            }
+            else { glassAmount = glassAmountStandard; }
+            var seatsMatch = Regex.Match(seatsAmountTextBox.Text, @"^[1-9][0-9]*$");
+            if (seatsMatch.Success && int.TryParse(seatsAmountTextBox.Text, out result))
+            {
+                 seatAmount = result; 
+            }
+            else { seatAmount = seatAmountStandard; }
+            timeTillBarCloses = 70;
             activeTasks = new BlockingCollection<Task>();
             simulationSpeedSlider.ValueChanged += SimulationSpeedValueChanged;
             Random random = new Random();
@@ -134,10 +150,7 @@ namespace Lab6
                         simulationInitiated = false;
                         Dispatcher.Invoke(() =>
                         {
-                            openCloseBarButton.IsEnabled = true;
-                            openCloseBarButton.Content = "Open bar";
-                            simulationSpeedSlider.IsEnabled = false;
-                            simulationSpeedValueTextBox.IsEnabled = false;
+                            UISettingsOnBarClose();
                         });
                     }
                     Thread.Sleep(250 / simulationSpeed);
@@ -191,6 +204,27 @@ namespace Lab6
             TimeSpan elapsedTime = (laterTime - earlierTime);
             double elapsedTimeSeconds = elapsedTime.TotalSeconds;
             return elapsedTimeSeconds;
+        }
+        void UISettingsOnBarOpen()
+        {
+            openCloseBarButton.Content = "Close bar";
+            simulationSpeedSlider.IsEnabled = true;
+            simulationSpeedValueTextBox.IsEnabled = true;
+            glassesAmountTextBox.IsEnabled = false;
+            seatsAmountTextBox.IsEnabled = false;
+            glassesAmountTextBox.Visibility = Visibility.Hidden;
+            seatsAmountTextBox.Visibility = Visibility.Hidden;
+        }
+        void UISettingsOnBarClose()
+        {
+            openCloseBarButton.IsEnabled = true;
+            openCloseBarButton.Content = "Open bar";
+            simulationSpeedSlider.IsEnabled = false;
+            simulationSpeedValueTextBox.IsEnabled = false;
+            glassesAmountTextBox.IsEnabled = true;
+            seatsAmountTextBox.IsEnabled = true;
+            glassesAmountTextBox.Visibility = Visibility.Visible;
+            seatsAmountTextBox.Visibility = Visibility.Visible;
         }
     }
 }
