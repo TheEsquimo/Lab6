@@ -16,7 +16,7 @@
         <Button x:Name="bartenderPauseContinueButton" Content="Pause/continue" HorizontalAlignment="Left" Margin="10,295,0,0" VerticalAlignment="Top" Width="175" Height="35"/>
         <Button x:Name="waiterPauseContinueButton" Content="Pause/continue" HorizontalAlignment="Left" Margin="213,295,0,0" VerticalAlignment="Top" Width="175" Height="35"/>
         <Button x:Name="guestsPauseContinueButton" Content="Pause/continue" HorizontalAlignment="Left" Margin="414,295,0,0" VerticalAlignment="Top" Width="199" Height="35"/>
-        <Button x:Name="button" Content="Open/close bar" HorizontalAlignment="Left" Margin="10,350,0,0" VerticalAlignment="Top" Width="603" Height="40"/>
+        <Button x:Name="openCloseBarButton" Content="Open/close bar" HorizontalAlignment="Left" Margin="10,350,0,0" VerticalAlignment="Top" Width="603" Height="40"/>
         <Button x:Name="button1" Content="Stop all threads" HorizontalAlignment="Left" Margin="644,295,0,0" VerticalAlignment="Top" Width="138" Height="35"/>
         <Slider x:Name="simulationSpeedSlider" HorizontalAlignment="Left" Margin="644,372,0,0" VerticalAlignment="Top" Width="138"/>
         <Label x:Name="simulationSpeedLabel" Content="Simulation Speed" HorizontalAlignment="Left" Margin="644,341,0,0" VerticalAlignment="Top" Width="138"/>

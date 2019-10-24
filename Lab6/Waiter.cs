@@ -27,7 +27,7 @@ namespace Lab6
 
         public void Start()
         {
-            Task.Run(() =>
+            Task thisTask = Task.Run(() =>
             {
                 while (TheMainWindow.timeTillBarCloses > 0 || TheMainWindow.guests.Count > 0)
                 {
@@ -36,6 +36,7 @@ namespace Lab6
                 }
                 GoHome();
             });
+            TheMainWindow.activeTasks.Add(thisTask);
         }
 
         private void CollectDishes()

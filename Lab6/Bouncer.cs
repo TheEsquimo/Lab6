@@ -21,7 +21,7 @@ namespace Lab6
         }
         public void LetGuestsIn()
         {
-            Task.Run(() =>
+            Task thisTask = Task.Run(() =>
             {
                 if (TheMainWindow.timeTillBarCloses <= 0)
                 {
@@ -38,6 +38,7 @@ namespace Lab6
                 newGuest.Start();
                 LetGuestsIn();
             });
+            TheMainWindow.activeTasks.Add(thisTask);
         }
     }
 }

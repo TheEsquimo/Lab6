@@ -22,13 +22,15 @@ namespace Lab6
     /// </summary>
     public partial class MainWindow : Window
     {
-        internal double timeTillBarCloses = 120;
+        public bool simulationInitiated = false;
+        internal double timeTillBarCloses = 25;
         internal int glassAmount = 8;
         internal int seatAmount = 9;
         internal int availableSeats;
         DateTime dateTimeStart;
         DateTime dateTimeLastUpdate;
         internal int simulationSpeed = 1;
+        internal BlockingCollection<Task> activeTasks;
         internal BlockingCollection<Glass> glassShelf;
         internal BlockingCollection<Glass> dirtyGlasses;
         internal BlockingCollection<Seat> seats;
@@ -53,6 +55,26 @@ namespace Lab6
         public MainWindow()
         {
             InitializeComponent();
+            openCloseBarButton.Click += OnOpenCloseBarButtonClicked;
+        }
+
+        private void OnOpenCloseBarButtonClicked(object sender, RoutedEventArgs e)
+        {
+            if (!simulationInitiated)
+            {
+                InitiateSimulation();
+            }
+            else
+            {
+                openCloseBarButton.IsEnabled = false;
+                timeTillBarCloses = 0;
+            }
+        }
+
+        public void InitiateSimulation()
+        {
+            simulationInitiated = true;
+            activeTasks = new BlockingCollection<Task>();
             Random random = new Random();
             dateTimeStart = DateTime.Now;
             dateTimeLastUpdate = DateTime.Now;
@@ -81,7 +103,7 @@ namespace Lab6
             dirtyGlasses = new BlockingCollection<Glass>();
             guestsWaitingForBeer = new ConcurrentQueue<Guest>();
             guestsWaitingForSeat = new ConcurrentQueue<Guest>();
-            
+
             Bouncer bouncer = new Bouncer(this);
             bouncer.LetGuestsIn();
             Bartender bartender = new Bartender(this);
@@ -94,7 +116,31 @@ namespace Lab6
                 while (timeTillBarCloses > 0)
                 {
                     UpdatePubTimer();
-                    Thread.Sleep(1000);
+                    Thread.Sleep(1000 / simulationSpeed);
+                }
+            });
+
+            Task.Run(() =>
+            {
+                while (simulationInitiated)
+                {
+                    if (timeTillBarCloses <= 0)
+                    {
+                        bool tasksCompleted = true;
+                        foreach (Task task in activeTasks)
+                        {
+                            if (!task.IsCompleted) { tasksCompleted = false; }
+                        }
+                        if (tasksCompleted)
+                        {
+                            simulationInitiated = false;
+                            Dispatcher.Invoke(() =>
+                            {
+                                openCloseBarButton.IsEnabled = true;
+                            });
+                        }
+                    }
+                    Thread.Sleep(250 / simulationSpeed);
                 }
             });
         }
@@ -121,8 +167,8 @@ namespace Lab6
         {
             double elapsedTime = SecondsBetweenDates(dateTimeLastUpdate, DateTime.Now);
             timeTillBarCloses -= elapsedTime;
-            LabelMessage(timeTillBarClosesLabel, "Time till bar closes: " + (int)timeTillBarCloses);
             dateTimeLastUpdate = DateTime.Now;
+            LabelMessage(timeTillBarClosesLabel, "Time till bar closes: " + (int)timeTillBarCloses);
         }
 
         public double SecondsBetweenDates(DateTime earlierTime, DateTime laterTime)
