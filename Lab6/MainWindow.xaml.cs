@@ -53,6 +53,7 @@ namespace Lab6
         public MainWindow()
         {
             InitializeComponent();
+            simulationSpeedSlider.ValueChanged += SimulationSpeedValueChanged;
             Random random = new Random();
             dateTimeStart = DateTime.Now;
             dateTimeLastUpdate = DateTime.Now;
@@ -97,6 +98,11 @@ namespace Lab6
                     Thread.Sleep(1000);
                 }
             });
+        }
+
+        private void SimulationSpeedValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            simulationSpeed = (int)simulationSpeedSlider.Value;
         }
 
         public void ListBoxMessage(ListBox listBox, string message)
