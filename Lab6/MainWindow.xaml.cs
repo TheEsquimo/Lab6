@@ -60,6 +60,7 @@ namespace Lab6
         {
             InitializeComponent();
             openCloseBarButton.Click += OnOpenCloseBarButtonClicked;
+            simulationSpeedSlider.ValueChanged += SimulationSpeedValueChanged;
         }
 
         private void OnOpenCloseBarButtonClicked(object sender, RoutedEventArgs e)
@@ -93,9 +94,13 @@ namespace Lab6
                  seatAmount = result; 
             }
             else { seatAmount = seatAmountStandard; }
-            timeTillBarCloses = 70;
+            var timeMatch = Regex.Match(timeTillBarClosesTextBox.Text, @"^[1-9][0-9]*$");
+            if (timeMatch.Success && int.TryParse(timeTillBarClosesTextBox.Text, out result))
+            {
+                timeTillBarCloses = result;
+            }
+            else { timeTillBarCloses = timeTillBarClosesStandard; }
             activeTasks = new BlockingCollection<Task>();
-            simulationSpeedSlider.ValueChanged += SimulationSpeedValueChanged;
             Random random = new Random();
             dateTimeStart = DateTime.Now;
             dateTimeLastUpdate = DateTime.Now;
@@ -208,23 +213,23 @@ namespace Lab6
         void UISettingsOnBarOpen()
         {
             openCloseBarButton.Content = "Close bar";
-            simulationSpeedSlider.IsEnabled = true;
-            simulationSpeedValueTextBox.IsEnabled = true;
             glassesAmountTextBox.IsEnabled = false;
             seatsAmountTextBox.IsEnabled = false;
+            timeTillBarClosesTextBox.IsEnabled = false;
             glassesAmountTextBox.Visibility = Visibility.Hidden;
             seatsAmountTextBox.Visibility = Visibility.Hidden;
+            timeTillBarClosesTextBox.Visibility = Visibility.Hidden;
         }
         void UISettingsOnBarClose()
         {
             openCloseBarButton.IsEnabled = true;
             openCloseBarButton.Content = "Open bar";
-            simulationSpeedSlider.IsEnabled = false;
-            simulationSpeedValueTextBox.IsEnabled = false;
             glassesAmountTextBox.IsEnabled = true;
             seatsAmountTextBox.IsEnabled = true;
+            timeTillBarClosesTextBox.IsEnabled = true;
             glassesAmountTextBox.Visibility = Visibility.Visible;
             seatsAmountTextBox.Visibility = Visibility.Visible;
+            timeTillBarClosesTextBox.Visibility = Visibility.Visible;
         }
     }
 }
