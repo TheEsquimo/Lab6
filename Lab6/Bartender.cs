@@ -9,20 +9,18 @@ namespace Lab6
     class Bartender
     {
         public MainWindow TheMainWindow { get; set; }
-        int fetchGlassTime;
-        int pourBeerTime;
         bool waitForCustomerMessageSent = false;
+        const int fetchGlassTime = 3000;
+        const int pourBeerTime = 3000;
         const string waitForCustomerMessage = "Waiting for customer";
         const string fetchingGlassMessage = "Getting a glass from the shelf";
         const string fillingGlassMessage = "Pouring a glass of beer";
         const string goHomeMessage = "Bartender goes home";
         Glass heldGlass;
 
-        public Bartender(MainWindow mainWindow, int theFetchGlassTime = 3000, int thePourBeerTime = 3000)
+        public Bartender(MainWindow mainWindow)
         {
             TheMainWindow = mainWindow;
-            fetchGlassTime = theFetchGlassTime;
-            pourBeerTime = thePourBeerTime;
         }
 
         public void Start()
