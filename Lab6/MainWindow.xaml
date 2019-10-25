@@ -7,9 +7,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <ListBox x:Name="bartenderListBox" HorizontalAlignment="Left" Height="200" Margin="10,90,0,0" VerticalAlignment="Top" Width="198"/>
-        <ListBox x:Name="waiterListBox" HorizontalAlignment="Left" Height="200" Margin="213,90,0,0" VerticalAlignment="Top" Width="196"/>
-        <ListBox x:Name="guestListBox" HorizontalAlignment="Left" Height="200" Margin="414,90,0,0" VerticalAlignment="Top" Width="225"/>
+        <ListBox x:Name="bartenderListBox" HorizontalAlignment="Left" Height="200" Margin="10,90,0,0" VerticalAlignment="Top" Width="150"/>
+        <ListBox x:Name="waiterListBox" HorizontalAlignment="Left" Height="200" Margin="213,90,0,0" VerticalAlignment="Top" Width="150"/>
+        <ListBox x:Name="guestListBox" HorizontalAlignment="Left" Height="200" Margin="414,90,0,0" VerticalAlignment="Top" Width="199"/>
         <Label x:Name="bartenderLabel" Content="Bartender" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top" Width="150"/>
         <Label x:Name="waiterLabel" Content="Waiter" HorizontalAlignment="Left" Margin="213,59,0,0" VerticalAlignment="Top" Width="150"/>
         <Label x:Name="guestsLabel" Content="Guests" HorizontalAlignment="Left" Margin="414,59,0,0" VerticalAlignment="Top" Width="201"/>
@@ -23,7 +23,6 @@
         <TextBox x:Name="simulationSpeedValueTextBox" HorizontalAlignment="Left" Height="26" Margin="753,341,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="29" Text="{Binding ElementName=simulationSpeedSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" SelectionOpacity="1"/>
         <TextBox x:Name="glassesAmountTextBox" HorizontalAlignment="Left" Height="19" Margin="678,171,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="42"/>
         <TextBox x:Name="timeTillBarClosesTextBox" HorizontalAlignment="Left" Height="26" Margin="116,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="55"/>
-
         <TextBox x:Name="seatsAmountTextBox" HorizontalAlignment="Left" Height="19" Margin="678,231,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="37"/>
         <CheckBox x:Name="doBusLoadCheckBox" Content="Busload" HorizontalAlignment="Left" Margin="38,334,0,0" VerticalAlignment="Top" ClickMode="Press"/>
         <Label x:Name="busLoadExplanationLabel" Content="Let's in 15 guests at &#xD;&#xA;once after 20 seconds" HorizontalAlignment="Left" Margin="10,290,0,0" VerticalAlignment="Top" Width="132" Height="39"/>

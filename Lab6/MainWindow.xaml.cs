@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,6 +22,7 @@ namespace Lab6
     /// </summary>
     public partial class MainWindow : Window
     {
+
         internal bool simulationInitiated = false;
         internal bool doBusLoad;
         internal const double timeTillBarClosesStandard = 120;
@@ -38,7 +38,7 @@ namespace Lab6
         internal BlockingCollection<Task> activeTasks;
         internal BlockingCollection<Glass> glassShelf;
         internal BlockingCollection<Glass> dirtyGlasses;
-        internal BlockingCollection<Seat> seats;
+        internal BlockingCollection<Chair> chairs;
         internal BlockingCollection<Guest> guests;
         internal ConcurrentQueue<Guest> guestsWaitingForBeer;
         internal ConcurrentQueue<Guest> guestsWaitingForSeat;
@@ -105,8 +105,6 @@ namespace Lab6
             else { timeTillBarCloses = timeTillBarClosesStandard; }
             activeTasks = new BlockingCollection<Task>();
             Random random = new Random();
-            dateTimeStart = DateTime.Now;
-            dateTimeLastUpdate = DateTime.Now;
 
             glassShelf = new BlockingCollection<Glass>();
             for (int i = 0; i < glassAmount; i++)
@@ -115,79 +113,31 @@ namespace Lab6
                 glassShelf.Add(newGlass);
             }
 
-            seats = new BlockingCollection<Seat>();
-            for (int i = 0; i < seatAmount; i++)
+            chairs = new BlockingCollection<Chair>();
+            for (int i = 0; i < chairAmount; i++)
             {
-                Seat newSeat = new Seat();
-                seats.Add(newSeat);
+                Chair newChair = new Chair();
+                chairs.Add(newChair);
             }
-            availableSeats = seatAmount;
-            LabelMessage(guestAmountLabel, $"Guests: 0");
-            LabelMessage(glassesAmountLabel, $"Available glasses: {glassShelf.Count}" +
-                                             $"\nTotal: {glassAmount}");
-            LabelMessage(availableSeatsAmountLabel, $"Available seats: {availableSeats}" +
-                                             $"\nTotal: {seatAmount}");
 
             guests = new BlockingCollection<Guest>();
             dirtyGlasses = new BlockingCollection<Glass>();
             guestsWaitingForBeer = new ConcurrentQueue<Guest>();
             guestsWaitingForSeat = new ConcurrentQueue<Guest>();
-
+            
             Bouncer bouncer = new Bouncer(this);
             bouncer.Work();
             Bartender bartender = new Bartender(this);
             bartender.Start();
             Waiter waiter = new Waiter(this);
             waiter.Start();
-
-            Task.Run(() =>
-            {
-                while (timeTillBarCloses > 0)
-                {
-                    UpdatePubTimer();
-                    Thread.Sleep(1000 / simulationSpeed);
-                }
-            });
-
-            Task.Run(() =>
-            {
-                while (simulationInitiated)
-                {
-                    if (timeTillBarCloses <= 0 && AreTasksComplete())
-                    {
-                        simulationInitiated = false;
-                        Dispatcher.Invoke(() =>
-                        {
-                            UISettingsOnBarClose();
-                        });
-                    }
-                    Thread.Sleep(250 / simulationSpeed);
-                }
-            });
-        }
-
-        private bool AreTasksComplete()
-        {
-            bool tasksCompleted = true;
-            foreach (Task task in activeTasks)
-            {
-                if (!task.IsCompleted) { tasksCompleted = false; }
-            }
-            return tasksCompleted;
-        }
-        
-        private void SimulationSpeedValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            simulationSpeed = (int)simulationSpeedSlider.Value;
         }
 
         public void ListBoxMessage(ListBox listBox, string message)
         {
-            double elapsedTime = SecondsBetweenDates(dateTimeStart, DateTime.Now);
-            elapsedTime = Math.Round(elapsedTime, 1, MidpointRounding.AwayFromZero);
             Dispatcher.Invoke(() =>
             {
-                listBox.Items.Insert(0, $"({elapsedTime}) {message}");
+                listBox.Items.Insert(0, message);
                 listBox.Items.Refresh();
             });
         }

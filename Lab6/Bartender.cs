@@ -29,33 +29,21 @@ namespace Lab6
             {
                 while (TheMainWindow.timeTillBarCloses > 0 || TheMainWindow.guests.Count > 0)
                 {
-                    if (!WaitForCustomer())
-                    {
-                        waitForCustomerMessageSent = false;
-                        FetchGlass();
-                        PourBeer();
-                    }
+                    WaitForCustomer();
+                    FetchGlass();
+                    PourBeer();
                 }
                 GoHome();
             });
             TheMainWindow.activeTasks.Add(bartenderTask);
         }
 
-        private bool WaitForCustomer()
+        private void WaitForCustomer()
         {
-            if (TheMainWindow.guestsWaitingForBeer.IsEmpty)
+            TheMainWindow.ListBoxMessage(TheMainWindow.bartenderListBox, waitForCustomerMessage);
+            while (TheMainWindow.guestsWaitingForBeer.IsEmpty)
             {
-                if (!waitForCustomerMessageSent)
-                {
-                    TheMainWindow.ListBoxMessage(TheMainWindow.bartenderListBox, waitForCustomerMessage);
-                    waitForCustomerMessageSent = true;
-                }
                 Thread.Sleep(250);
-                return true;
-            }
-            else
-            {
-                return false;
             }
         }
 
@@ -66,18 +54,16 @@ namespace Lab6
                 Thread.Sleep(250);
             }
             TheMainWindow.ListBoxMessage(TheMainWindow.bartenderListBox, fetchingGlassMessage);
-            Thread.Sleep(fetchGlassTime / TheMainWindow.simulationSpeed);
+            Thread.Sleep(fetchGlassTime * TheMainWindow.simulationSpeed);
             heldGlass = TheMainWindow.glassShelf.Take();
-            TheMainWindow.LabelMessage(TheMainWindow.glassesAmountLabel, $"Available glasses: {TheMainWindow.glassShelf.Count}" +
-                                                                         $"\nTotal: {TheMainWindow.glassAmount}");
         }
 
         private void PourBeer()
         {
+            TheMainWindow.ListBoxMessage(TheMainWindow.bartenderListBox, fillingGlassMessage);
+            Thread.Sleep(pourBeerTime * TheMainWindow.simulationSpeed);
             Guest guestToRecieveBeer;
             TheMainWindow.guestsWaitingForBeer.TryDequeue(out guestToRecieveBeer);
-            TheMainWindow.ListBoxMessage(TheMainWindow.bartenderListBox, $"{fillingGlassMessage} for {guestToRecieveBeer.Name}");
-            Thread.Sleep(pourBeerTime / TheMainWindow.simulationSpeed);
             guestToRecieveBeer.HeldGlass = heldGlass;
             heldGlass = null;
         }
