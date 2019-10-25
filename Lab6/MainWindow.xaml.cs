@@ -21,7 +21,6 @@ namespace Lab6
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    /// //lol
     public partial class MainWindow : Window
     {
         internal bool simulationInitiated = false;
