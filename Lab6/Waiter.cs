@@ -10,31 +10,32 @@ namespace Lab6
     {
         internal MainWindow TheMainWindow { get; set; }
         BlockingCollection<Glass> dirtyGlasses = new BlockingCollection<Glass>();
-        const int collectDishesTime = 10000;
-        const int cleanDishesTime = 15000;
-        const string lookingForDishesMessage = "Looking for dishes";
-        const string collectingDishesMessage = "Collecting dishes";
-        const string cleaningDishesMessage = "Cleaning dishes";
-        const string finishedCleaningMessage = "Put glasses back on shelf";
-        const string goHomeMessage = "Waiter goes home";
+        int collectDishesTime;
+        int cleanDishesTime;
+        string lookingForDishesMessage = "Looking for dishes";
+        string collectingDishesMessage = "Collecting dishes";
+        string cleaningDishesMessage = "Cleaning dishes";
+        string finishedCleaningMessage = "Put glasses back on shelf";
+        string goHomeMessage = "Waiter goes home";
         
-        public Waiter(MainWindow mainWindow)
+        public Waiter(MainWindow mainWindow, int theCollectDishesTime = 10000, int theCleanDishesTime = 15000)
         {
             TheMainWindow = mainWindow;
+            collectDishesTime = theCollectDishesTime;
+            cleanDishesTime = theCleanDishesTime;
         }
-      
+
         public void Start()
         {
-            Task waiterTask = Task.Run(() =>
+            Task.Run(() =>
             {
-            while (TheMainWindow.timeTillBarCloses > 0 || TheMainWindow.guests.Count > 0 || TheMainWindow.dirtyGlasses.Count > 0)
+                while (TheMainWindow.timeTillBarCloses > 0 || TheMainWindow.guests.Count > 0)
                 {
                     CollectDishes();
                     CleanDishes();
                 }
                 GoHome();
             });
-            TheMainWindow.activeTasks.Add(waiterTask);
         }
 
         private void CollectDishes()
