@@ -12,10 +12,10 @@ namespace Lab6
         int fetchGlassTime;
         int pourBeerTime;
         bool waitForCustomerMessageSent = false;
-        string waitForCustomerMessage = "Waiting for customer";
-        string fetchingGlassMessage = "Getting a glass from the shelf";
-        string fillingGlassMessage = "Pouring a glass of beer";
-        string goHomeMessage = "Bartender goes home";
+        const string waitForCustomerMessage = "Waiting for customer";
+        const string fetchingGlassMessage = "Getting a glass from the shelf";
+        const string fillingGlassMessage = "Pouring a glass of beer";
+        const string goHomeMessage = "Bartender goes home";
         Glass heldGlass;
 
         public Bartender(MainWindow mainWindow, int theFetchGlassTime = 3000, int thePourBeerTime = 3000)
