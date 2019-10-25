@@ -32,7 +32,7 @@ namespace Lab6
         internal int seatAmount;
         internal int availableSeats;
         internal int simulationSpeed = 1;
-        DateTime dateTimeStart;
+        internal DateTime dateTimeStart;
         DateTime dateTimeLastUpdate;
         internal BlockingCollection<Task> activeTasks;
         internal BlockingCollection<Glass> glassShelf;
