@@ -25,5 +25,8 @@
         <TextBox x:Name="timeTillBarClosesTextBox" HorizontalAlignment="Left" Height="26" Margin="116,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="55"/>
 
         <TextBox x:Name="seatsAmountTextBox" HorizontalAlignment="Left" Height="19" Margin="678,231,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="37"/>
+        <CheckBox x:Name="doBusLoadCheckBox" Content="Busload" HorizontalAlignment="Left" Margin="38,334,0,0" VerticalAlignment="Top" ClickMode="Press"/>
+        <Label x:Name="busLoadExplanationLabel" Content="Let's in 15 guests at &#xD;&#xA;once after 20 seconds" HorizontalAlignment="Left" Margin="10,290,0,0" VerticalAlignment="Top" Width="132" Height="39"/>
+        <Label x:Name="barCLoseLabel" Content="Bar closed" HorizontalAlignment="Center" Margin="296,361,361,0" VerticalAlignment="Top" Height="48" Width="135" FontWeight="Bold" FontSize="24" Visibility="Hidden"/>
     </Grid>
 </Window>

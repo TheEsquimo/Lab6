@@ -27,7 +27,7 @@ namespace Lab6
         {
             Task waiterTask = Task.Run(() =>
             {
-                while (TheMainWindow.timeTillBarCloses > 0 || TheMainWindow.guests.Count > 0)
+            while (TheMainWindow.timeTillBarCloses > 0 || TheMainWindow.guests.Count > 0 || TheMainWindow.dirtyGlasses.Count > 0)
                 {
                     CollectDishes();
                     CleanDishes();
