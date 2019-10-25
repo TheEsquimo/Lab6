@@ -9,23 +9,24 @@ namespace Lab6
     class Bartender
     {
         public MainWindow TheMainWindow { get; set; }
-        bool waitForCustomerMessageSent = false;
-        const int fetchGlassTime = 3000;
-        const int pourBeerTime = 3000;
-        const string waitForCustomerMessage = "Waiting for customer";
-        const string fetchingGlassMessage = "Getting a glass from the shelf";
-        const string fillingGlassMessage = "Pouring a glass of beer";
-        const string goHomeMessage = "Bartender goes home";
+        int fetchGlassTime;
+        int pourBeerTime;
+        string waitForCustomerMessage = "Waiting for customer";
+        string fetchingGlassMessage = "Getting a glass from the shelf";
+        string fillingGlassMessage = "Pouring a glass of beer";
+        string goHomeMessage = "Bartender goes home";
         Glass heldGlass;
 
-        public Bartender(MainWindow mainWindow)
+        public Bartender(MainWindow mainWindow, int theFetchGlassTime = 3000, int thePourBeerTime = 3000)
         {
             TheMainWindow = mainWindow;
+            fetchGlassTime = theFetchGlassTime;
+            pourBeerTime = thePourBeerTime;
         }
 
         public void Start()
         {
-            Task bartenderTask = Task.Run(() => 
+            Task.Run(() => 
             {
                 while (TheMainWindow.timeTillBarCloses > 0 || TheMainWindow.guests.Count > 0)
                 {
@@ -35,7 +36,6 @@ namespace Lab6
                 }
                 GoHome();
             });
-            TheMainWindow.activeTasks.Add(bartenderTask);
         }
 
         private void WaitForCustomer()

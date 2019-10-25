@@ -7,15 +7,16 @@ namespace Lab6
 {
     public class Guest
     {
-        const string enterBarMessage = "Entering the pub, heading to the bar";
-        const string searchForSeatMessage = "Searching for a free seat";
-        const string sitDownMessage = "Sitting down and drinking beer";
-        const string finishedDrinkMessage = "Finished drink, leaving bar";
+        string enterBarMessage = "Entering the pub, heading to the bar";
+        string searchForChairMessage = "Searching for a free chair";
+        string sitDownMessage = "Sitting down and drinking beer";
+        string finishedDrinkMessage = "Finished drink, leaving bar";
         Random random = new Random();
-        const int timeToGetToBar = 1000;
-        const int timeToGetToSeat = 4000;
-        const int minDrinkTime = 10000;
-        const int maxDrinkTime = 20000;
+        int minDrinkTime = 1000;
+        int maxDrinkTime = 2000;
+        int timeToGetToBar = 1000;
+        int timeToGetToChair = 4000;
+
         public string Name { get; set; }
         public string Message { get; set; }
         internal Glass HeldGlass { get; set; }
@@ -30,14 +31,13 @@ namespace Lab6
 
         internal void Start()
         {
-            Task guestTask = Task.Run(() =>
+            Task.Run(() =>
             {
                 EnterBar();
                 SearchForAChair();
                 TakeASeat();
                 LeaveBar();
             });
-            TheMainWindow.activeTasks.Add(guestTask);
         }
         internal void EnterBar()
         {
