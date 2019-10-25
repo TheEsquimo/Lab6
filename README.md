@@ -77,7 +77,7 @@ ROUTINE:
  * ~~The waiter picks up and does the dishes at twice the speed~~
  * ~~The bar is open for five minutes or longer~~
  * ~~Couples night - bouncer always lets in two customers whenever they let someone in~~
- * Double the amount of time between bouncer let-ins, after 20 seconds 15 guests are let in at once (one-time event)
+ * ~~Double the amount of time between bouncer let-ins, after 20 seconds 15 guests are let in at once (one-time event)~~
  
 # Bedömning
 När ni är klara med laborationen ska ni se till att en annan grupp granskar er laboration. Det är ert eget ansvar att se till att just er laboration blir granskad. (Om det är svårt att hitta kodgranskare, så rekommenderar jag mutor i form av riktig öl) Ni ska dessutom granska en annan grupps kod
