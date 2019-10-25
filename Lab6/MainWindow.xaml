@@ -13,16 +13,19 @@
         <Label x:Name="bartenderLabel" Content="Bartender" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top" Width="150"/>
         <Label x:Name="waiterLabel" Content="Waiter" HorizontalAlignment="Left" Margin="213,59,0,0" VerticalAlignment="Top" Width="150"/>
         <Label x:Name="guestsLabel" Content="Guests" HorizontalAlignment="Left" Margin="414,59,0,0" VerticalAlignment="Top" Width="201"/>
-        <Button x:Name="bartenderPauseContinueButton" Content="Pause/continue" HorizontalAlignment="Left" Margin="10,295,0,0" VerticalAlignment="Top" Width="150" Height="35"/>
-        <Button x:Name="waiterPauseContinueButton" Content="Pause/continue" HorizontalAlignment="Left" Margin="213,295,0,0" VerticalAlignment="Top" Width="150" Height="35"/>
-        <Button x:Name="guestsPauseContinueButton" Content="Pause/continue" HorizontalAlignment="Left" Margin="414,295,0,0" VerticalAlignment="Top" Width="199" Height="35"/>
-        <Button x:Name="button" Content="Open/close bar" HorizontalAlignment="Left" Margin="10,350,0,0" VerticalAlignment="Top" Width="603" Height="40"/>
-        <Button x:Name="button1" Content="Stop all threads" HorizontalAlignment="Left" Margin="644,295,0,0" VerticalAlignment="Top" Width="138" Height="35"/>
-        <Slider x:Name="simulationSpeedSlider" HorizontalAlignment="Left" Margin="644,372,0,0" VerticalAlignment="Top" Width="138"/>
-        <Label x:Name="simulationSpeedLabel" Content="Simulation Speed" HorizontalAlignment="Left" Margin="644,341,0,0" VerticalAlignment="Top" Width="138"/>
+        <Button x:Name="openCloseBarButton" Content="Open bar" HorizontalAlignment="Left" Margin="155,316,0,0" VerticalAlignment="Top" Width="399" Height="40"/>
+        <Slider x:Name="simulationSpeedSlider" HorizontalAlignment="Left" Margin="644,372,0,0" VerticalAlignment="Top" Width="138" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Value="1" Minimum="1"/>
+        <Label x:Name="simulationSpeedLabel" Content="Simulation Speed" HorizontalAlignment="Left" Margin="644,341,0,0" VerticalAlignment="Top" Width="104"/>
         <Label x:Name="guestAmountLabel" Content="Guests: " HorizontalAlignment="Left" Margin="644,90,0,0" VerticalAlignment="Top" Width="138"/>
-        <Label x:Name="glassesAmountLabel" Content="Available glasses: " HorizontalAlignment="Left" Margin="644,150,0,0" VerticalAlignment="Top" Width="138"/>
-        <Label x:Name="availableSeatsAmountLabel" Content="Available seats: " HorizontalAlignment="Left" Margin="644,210,0,0" VerticalAlignment="Top" Width="138"/>
-        <Label x:Name="timeTillBarClosesLabel" Content="Time till bar closes: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" Height="26"/>
+        <Label x:Name="glassesAmountLabel" Content="Available glasses:  &#xD;&#xA;Total:" HorizontalAlignment="Left" Margin="644,150,0,0" VerticalAlignment="Top" Width="138" Height="55"/>
+        <Label x:Name="availableSeatsAmountLabel" Content="Available seats: &#xD;&#xA;Total: " HorizontalAlignment="Left" Margin="644,210,0,0" VerticalAlignment="Top" Width="138" Height="57"/>
+        <Label x:Name="timeTillBarClosesLabel" Content="Time till bar closes: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="132" Height="26"/>
+        <TextBox x:Name="simulationSpeedValueTextBox" HorizontalAlignment="Left" Height="26" Margin="753,341,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="29" Text="{Binding ElementName=simulationSpeedSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" SelectionOpacity="1"/>
+        <TextBox x:Name="glassesAmountTextBox" HorizontalAlignment="Left" Height="19" Margin="678,171,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="42"/>
+        <TextBox x:Name="timeTillBarClosesTextBox" HorizontalAlignment="Left" Height="26" Margin="116,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="55"/>
+        <TextBox x:Name="seatsAmountTextBox" HorizontalAlignment="Left" Height="19" Margin="678,231,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="37"/>
+        <CheckBox x:Name="doBusLoadCheckBox" Content="Busload" HorizontalAlignment="Left" Margin="38,334,0,0" VerticalAlignment="Top" ClickMode="Press"/>
+        <Label x:Name="busLoadExplanationLabel" Content="Let's in 15 guests at &#xD;&#xA;once after 20 seconds" HorizontalAlignment="Left" Margin="10,290,0,0" VerticalAlignment="Top" Width="132" Height="39"/>
+        <Label x:Name="barCLoseLabel" Content="Bar closed" HorizontalAlignment="Center" Margin="296,361,361,0" VerticalAlignment="Top" Height="48" Width="135" FontWeight="Bold" FontSize="24" Visibility="Hidden"/>
     </Grid>
 </Window>
