@@ -12,11 +12,11 @@ namespace Lab6
         BlockingCollection<Glass> dirtyGlasses = new BlockingCollection<Glass>();
         int collectDishesTime;
         int cleanDishesTime;
-        string lookingForDishesMessage = "Looking for dishes";
-        string collectingDishesMessage = "Collecting dishes";
-        string cleaningDishesMessage = "Cleaning dishes";
-        string finishedCleaningMessage = "Put glasses back on shelf";
-        string goHomeMessage = "Waiter goes home";
+        const string lookingForDishesMessage = "Looking for dishes";
+        const string collectingDishesMessage = "Collecting dishes";
+        const string cleaningDishesMessage = "Cleaning dishes";
+        const string finishedCleaningMessage = "Put glasses back on shelf";
+        const string goHomeMessage = "Waiter goes home";
         
         public Waiter(MainWindow mainWindow, int theCollectDishesTime = 10000, int theCleanDishesTime = 15000)
         {
