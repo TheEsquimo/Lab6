@@ -11,8 +11,8 @@ namespace Lab6
     class Bouncer
     {
         public MainWindow TheMainWindow { set; get; }
-        int fastestGuestLetInTime = 3000;
-        int slowestGuestLetInTime = 10000;
+        const int fastestGuestLetInTime = 3000;
+        const int slowestGuestLetInTime = 10000;
         Random random = new Random();
         
         public Bouncer(MainWindow mainWindow)
