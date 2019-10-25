@@ -63,7 +63,7 @@ ROUTINE:
 * ~~Simulation speed changable through UI in real-time in the form of slider~~
 * ~~Pub open-timer~~
  * ~~Time left till closing shown through UI~~
- * Amount of time to be open customizable through UI (not required)
+ * ~~Amount of time to be open customizable through UI (not required)~~
 * ~~See the amount of customers in pub~~
 * ~~See the amount of glasses available on shelf (and the total amount of glasses existent)~~
 * ~~See the amount of seats available (and the total amount of seats existent)~~
@@ -76,7 +76,7 @@ ROUTINE:
  * Guests stays double the amount of time
  * The waiter picks up and does the dishes at twice the speed
  * The bar is open for five minutes or longer
- * Couples night - bartender always lets in two customers whenever they let someone in
+ * Couples night - bouncer always lets in two customers whenever they let someone in
  * Double the amount of time between bouncer let-ins, after 20 seconds 15 guests are let in at once (one-time event)
  
 # Bedömning
