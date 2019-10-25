@@ -73,10 +73,10 @@ ROUTINE:
  * ~~Standard values~~
  * ~~20 glasses, 3 chairs~~
  * ~~5 glasses, 20 chairs~~
- * Guests stays double the amount of time
- * The waiter picks up and does the dishes at twice the speed
- * The bar is open for five minutes or longer
- * Couples night - bouncer always lets in two customers whenever they let someone in
+ * ~~Guests stays double the amount of time~~
+ * ~~The waiter picks up and does the dishes at twice the speed~~
+ * ~~The bar is open for five minutes or longer~~
+ * ~~Couples night - bouncer always lets in two customers whenever they let someone in~~
  * Double the amount of time between bouncer let-ins, after 20 seconds 15 guests are let in at once (one-time event)
  
 # Bedömning
