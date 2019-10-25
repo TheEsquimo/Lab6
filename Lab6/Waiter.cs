@@ -27,7 +27,7 @@ namespace Lab6
         {
             Task waiterTask = Task.Run(() =>
             {
-            while (TheMainWindow.timeTillBarCloses > 0 || TheMainWindow.guests.Count > 0 || TheMainWindow.dirtyGlasses.Count > 0)
+                while (TheMainWindow.timeTillBarCloses > 0 || TheMainWindow.guests.Count > 0)
                 {
                     CollectDishes();
                     CleanDishes();
@@ -42,11 +42,10 @@ namespace Lab6
             TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, lookingForDishesMessage);
             while (TheMainWindow.dirtyGlasses.Count <= 0)
             {
-                if (TheMainWindow.timeTillBarCloses <= 0 && TheMainWindow.guests.Count <= 0) { return; }
                 Thread.Sleep(250);
             }
             TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, collectingDishesMessage);
-            Thread.Sleep(collectDishesTime / TheMainWindow.simulationSpeed);
+            Thread.Sleep(collectDishesTime * TheMainWindow.simulationSpeed);
             foreach(Glass glass in TheMainWindow.dirtyGlasses)
             {
                 Glass dirtyGlass;
@@ -57,20 +56,15 @@ namespace Lab6
 
         private void CleanDishes()
         {
-            if (dirtyGlasses.Count > 0)
+            TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, cleaningDishesMessage);
+            Thread.Sleep(cleanDishesTime * TheMainWindow.simulationSpeed);
+            foreach(Glass glass in dirtyGlasses)
             {
-                TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, cleaningDishesMessage);
-                Thread.Sleep(cleanDishesTime / TheMainWindow.simulationSpeed);
-                foreach(Glass glass in dirtyGlasses)
-                {
-                    Glass cleanedGlass = null;
-                    dirtyGlasses.TryTake(out cleanedGlass);
-                    TheMainWindow.glassShelf.TryAdd(cleanedGlass);
-                }
-                TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, finishedCleaningMessage);
-                TheMainWindow.LabelMessage(TheMainWindow.glassesAmountLabel, $"Available glasses: {TheMainWindow.glassShelf.Count}" +
-                                                                             $"\nTotal: {TheMainWindow.glassAmount}");
+                Glass cleanedGlass = null;
+                dirtyGlasses.TryTake(out cleanedGlass);
+                TheMainWindow.glassShelf.TryAdd(cleanedGlass);
             }
+            TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, finishedCleaningMessage);
         }
 
         private void GoHome()

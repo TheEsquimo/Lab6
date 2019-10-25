@@ -11,15 +11,15 @@ namespace Lab6
     class Bouncer
     {
         public MainWindow TheMainWindow { set; get; }
-        const int fastestGuestLetInTime = 3000;
-        const int slowestGuestLetInTime = 10000;
+        int fastestGuestLetInTime = 3;
+        int slowestGuestLetInTime = 10;
         Random random = new Random();
         
         public Bouncer(MainWindow mainWindow)
         {
             TheMainWindow = mainWindow;
         }
-        public void Work()
+        public void LetGuestsIn()
         {
             Task bouncerTask = Task.Run(() =>
             {
@@ -65,8 +65,8 @@ namespace Lab6
                 TheMainWindow.guests.Add(newGuest);
                 TheMainWindow.guestsWaitingForBeer.Enqueue(newGuest);
                 newGuest.Start();
-            }
-            TheMainWindow.LabelMessage(TheMainWindow.guestAmountLabel, $"Guests: {TheMainWindow.guests.Count}");
+                //LetGuestsIn();
+            });
         }
     }
 }
