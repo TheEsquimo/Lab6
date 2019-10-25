@@ -19,7 +19,7 @@ namespace Lab6
         {
             TheMainWindow = mainWindow;
         }
-        public void LetGuestsIn()
+        public void Work()
         {
             Task thisTask = Task.Run(() =>
             {
@@ -31,17 +31,42 @@ namespace Lab6
                 Thread.Sleep((random.Next(fastestGuestLetInTime, slowestGuestLetInTime)) / TheMainWindow.simulationSpeed);
                 if (TheMainWindow.timeTillBarCloses > 0)
                 {
-                    int randomNameNumber = random.Next(TheMainWindow.guestNames.Count);
-                    string nameOfNewGuest = TheMainWindow.guestNames[randomNameNumber];
-                    Guest newGuest = new Guest(nameOfNewGuest, TheMainWindow);
-                    TheMainWindow.guests.Add(newGuest);
-                    TheMainWindow.guestsWaitingForBeer.Enqueue(newGuest);
-                    TheMainWindow.LabelMessage(TheMainWindow.guestAmountLabel, $"Guests: {TheMainWindow.guests.Count}");
-                    newGuest.Start();
+                    if(TheMainWindow.SecondsBetweenDates(TheMainWindow.dateTimeStart ,DateTime.Now) > 20 && TheMainWindow.doBusLoad)
+                    {
+                        LetGuestsIn(15);
+                        TheMainWindow.doBusLoad = false;
+                    }
+                    else
+                    {
+                        LetGuestsIn();
+                    }
                 }
-                LetGuestsIn();
+                Work();
             });
             TheMainWindow.activeTasks.Add(thisTask);
+        }
+        void LetGuestsIn()
+        {
+            int randomNameNumber = random.Next(TheMainWindow.guestNames.Count);
+            string nameOfNewGuest = TheMainWindow.guestNames[randomNameNumber];
+            Guest newGuest = new Guest(nameOfNewGuest, TheMainWindow);
+            TheMainWindow.guests.Add(newGuest);
+            TheMainWindow.guestsWaitingForBeer.Enqueue(newGuest);
+            TheMainWindow.LabelMessage(TheMainWindow.guestAmountLabel, $"Guests: {TheMainWindow.guests.Count}");
+            newGuest.Start();
+        }
+        void LetGuestsIn(int amountOfGuests)
+        {
+            for (int i = 0; i < amountOfGuests; i++)
+            {
+                int randomNameNumber = random.Next(TheMainWindow.guestNames.Count);
+                string nameOfNewGuest = TheMainWindow.guestNames[randomNameNumber];
+                Guest newGuest = new Guest(nameOfNewGuest, TheMainWindow);
+                TheMainWindow.guests.Add(newGuest);
+                TheMainWindow.guestsWaitingForBeer.Enqueue(newGuest);
+                newGuest.Start();
+            }
+            TheMainWindow.LabelMessage(TheMainWindow.guestAmountLabel, $"Guests: {TheMainWindow.guests.Count}");
         }
     }
 }

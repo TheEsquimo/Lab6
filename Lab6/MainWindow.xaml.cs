@@ -23,7 +23,8 @@ namespace Lab6
     /// </summary>
     public partial class MainWindow : Window
     {
-        public bool simulationInitiated = false;
+        internal bool simulationInitiated = false;
+        internal bool doBusLoad;
         internal const double timeTillBarClosesStandard = 120;
         internal const int glassAmountStandard = 8;
         internal const int seatAmountStandard = 9;
@@ -32,7 +33,7 @@ namespace Lab6
         internal int seatAmount;
         internal int availableSeats;
         internal int simulationSpeed = 1;
-        DateTime dateTimeStart;
+        internal DateTime dateTimeStart;
         DateTime dateTimeLastUpdate;
         internal BlockingCollection<Task> activeTasks;
         internal BlockingCollection<Glass> glassShelf;
@@ -81,6 +82,8 @@ namespace Lab6
         public void InitiateSimulation()
         {
             simulationInitiated = true;
+            if (doBusLoadCheckBox.IsChecked.Value) { doBusLoad = true; }
+            else { doBusLoad = false; }
             int result;
             var glassMatch = Regex.Match(glassesAmountTextBox.Text, @"^[1-9][0-9]*$");
             if (glassMatch.Success && int.TryParse(glassesAmountTextBox.Text, out result))
@@ -131,7 +134,7 @@ namespace Lab6
             guestsWaitingForSeat = new ConcurrentQueue<Guest>();
 
             Bouncer bouncer = new Bouncer(this);
-            bouncer.LetGuestsIn();
+            bouncer.Work();
             Bartender bartender = new Bartender(this);
             bartender.Start();
             Waiter waiter = new Waiter(this);
@@ -216,20 +219,24 @@ namespace Lab6
             glassesAmountTextBox.IsEnabled = false;
             seatsAmountTextBox.IsEnabled = false;
             timeTillBarClosesTextBox.IsEnabled = false;
+            doBusLoadCheckBox.IsEnabled = false;
             glassesAmountTextBox.Visibility = Visibility.Hidden;
             seatsAmountTextBox.Visibility = Visibility.Hidden;
             timeTillBarClosesTextBox.Visibility = Visibility.Hidden;
+            barCLoseLabel.Visibility = Visibility.Hidden;
         }
         void UISettingsOnBarClose()
         {
-            openCloseBarButton.IsEnabled = true;
             openCloseBarButton.Content = "Open bar";
+            openCloseBarButton.IsEnabled = true;
             glassesAmountTextBox.IsEnabled = true;
             seatsAmountTextBox.IsEnabled = true;
             timeTillBarClosesTextBox.IsEnabled = true;
+            doBusLoadCheckBox.IsEnabled = true;
             glassesAmountTextBox.Visibility = Visibility.Visible;
             seatsAmountTextBox.Visibility = Visibility.Visible;
             timeTillBarClosesTextBox.Visibility = Visibility.Visible;
+            barCLoseLabel.Visibility = Visibility.Visible;
         }
     }
 }
