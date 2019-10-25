@@ -10,24 +10,22 @@ namespace Lab6
     {
         internal MainWindow TheMainWindow { get; set; }
         BlockingCollection<Glass> dirtyGlasses = new BlockingCollection<Glass>();
-        int collectDishesTime;
-        int cleanDishesTime;
+        const int collectDishesTime = 10000;
+        const int cleanDishesTime = 15000;
         const string lookingForDishesMessage = "Looking for dishes";
         const string collectingDishesMessage = "Collecting dishes";
         const string cleaningDishesMessage = "Cleaning dishes";
         const string finishedCleaningMessage = "Put glasses back on shelf";
         const string goHomeMessage = "Waiter goes home";
         
-        public Waiter(MainWindow mainWindow, int theCollectDishesTime = 10000, int theCleanDishesTime = 15000)
+        public Waiter(MainWindow mainWindow)
         {
             TheMainWindow = mainWindow;
-            collectDishesTime = theCollectDishesTime;
-            cleanDishesTime = theCleanDishesTime;
         }
 
         public void Start()
         {
-            Task thisTask = Task.Run(() =>
+            Task waiterTask = Task.Run(() =>
             {
                 while (TheMainWindow.timeTillBarCloses > 0 || TheMainWindow.guests.Count > 0)
                 {
@@ -36,7 +34,7 @@ namespace Lab6
                 }
                 GoHome();
             });
-            TheMainWindow.activeTasks.Add(thisTask);
+            TheMainWindow.activeTasks.Add(waiterTask);
         }
 
         private void CollectDishes()
