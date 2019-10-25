@@ -31,14 +31,14 @@ namespace Lab6
 
         internal void Start()
         {
-            Task thisTask = Task.Run(() =>
+            Task guestTask = Task.Run(() =>
             {
                 EnterBar();
                 SearchForASeat();
                 TakeASeat();
                 LeaveBar();
             });
-            TheMainWindow.activeTasks.Add(thisTask);
+            TheMainWindow.activeTasks.Add(guestTask);
         }
         internal void EnterBar()
         {

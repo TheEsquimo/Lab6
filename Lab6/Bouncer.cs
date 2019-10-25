@@ -21,7 +21,7 @@ namespace Lab6
         }
         public void LetGuestsIn()
         {
-            Task thisTask = Task.Run(() =>
+            Task bouncerTask = Task.Run(() =>
             {
                 if (TheMainWindow.timeTillBarCloses <= 0)
                 {
@@ -41,7 +41,7 @@ namespace Lab6
                 }
                 LetGuestsIn();
             });
-            TheMainWindow.activeTasks.Add(thisTask);
+            TheMainWindow.activeTasks.Add(bouncerTask);
         }
     }
 }
