@@ -14,8 +14,8 @@ namespace Lab6
         Random random = new Random();
         const int timeToGetToBar = 1000;
         const int timeToGetToSeat = 4000;
-        const int minDrinkTime = 10000;
-        const int maxDrinkTime = 20000;
+        const int minDrinkTime = 20000;
+        const int maxDrinkTime = 30000;
         
         public string Name { get; set; }
         public string Message { get; set; }
