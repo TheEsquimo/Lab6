@@ -98,6 +98,7 @@ namespace Lab6
             dirtyGlasses = new BlockingCollection<Glass>();
             guestsWaitingForBeer = new ConcurrentQueue<Guest>();
             guestsWaitingForSeat = new ConcurrentQueue<Guest>();
+            simulationSpeed = (int)TheMainWindow.simulationSpeedSlider.Value;
         }
 
         public void LetGuestsIn()
