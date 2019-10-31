@@ -23,50 +23,18 @@ namespace Lab6
     /// </summary>
     public partial class MainWindow : Window
     {
-        internal bool simulationInitiated = false;
-        internal bool doBusLoad;
-        internal const double timeTillBarClosesStandard = 120;
-        internal const int glassAmountStandard = 8;
-        internal const int seatAmountStandard = 9;
-        internal double timeTillBarCloses;
-        internal int glassAmount;
-        internal int seatAmount;
-        internal int availableSeats;
-        internal int simulationSpeed = 1;
-        internal DateTime dateTimeStart;
-        DateTime dateTimeLastUpdate;
-        internal BlockingCollection<Task> activeTasks;
-        internal BlockingCollection<Glass> glassShelf;
-        internal BlockingCollection<Glass> dirtyGlasses;
-        internal BlockingCollection<Seat> seats;
-        internal BlockingCollection<Guest> guests;
-        internal ConcurrentQueue<Guest> guestsWaitingForBeer;
-        internal ConcurrentQueue<Guest> guestsWaitingForSeat;
-        internal List<string> guestNames = new List<string>
-        {
-            "Bert",
-            "Berta",
-            "Bertil",
-            "Bertilda",
-            "Boris",
-            "Bertrand",
-            "Putin",
-            "Sonic",
-            "Guy",
-            "DudeGuyer",
-            "Bert-Erik"
-        };
-        
+        Pub pub;
         public MainWindow()
         {
             InitializeComponent();
             openCloseBarButton.Click += OnOpenCloseBarButtonClicked;
             simulationSpeedSlider.ValueChanged += SimulationSpeedValueChanged;
+            pub = new Pub(this, ListBoxMessage, LabelMessage);
         }
 
         private void OnOpenCloseBarButtonClicked(object sender, RoutedEventArgs e)
         {
-            if (!simulationInitiated)
+            if (!pub.simulationInitiated)
             {
                 UISettingsOnBarOpen();
                 InitiateSimulation();
@@ -75,145 +43,92 @@ namespace Lab6
             {
                 openCloseBarButton.IsEnabled = false;
                 openCloseBarButton.Content = "Finishing up for the day";
-                timeTillBarCloses = 0;
+                pub.timeTillBarCloses = 0;
             }
         }
 
         public void InitiateSimulation()
         {
-            simulationInitiated = true;
-            if (doBusLoadCheckBox.IsChecked.Value) { doBusLoad = true; }
-            else { doBusLoad = false; }
-            int result;
-            var glassMatch = Regex.Match(glassesAmountTextBox.Text, @"^[1-9][0-9]*$");
-            if (glassMatch.Success && int.TryParse(glassesAmountTextBox.Text, out result))
-            {
-                glassAmount = result;
-            }
-            else { glassAmount = glassAmountStandard; }
-            var seatsMatch = Regex.Match(seatsAmountTextBox.Text, @"^[1-9][0-9]*$");
-            if (seatsMatch.Success && int.TryParse(seatsAmountTextBox.Text, out result))
-            {
-                 seatAmount = result; 
-            }
-            else { seatAmount = seatAmountStandard; }
-            var timeMatch = Regex.Match(timeTillBarClosesTextBox.Text, @"^[1-9][0-9]*$");
-            if (timeMatch.Success && int.TryParse(timeTillBarClosesTextBox.Text, out result))
-            {
-                timeTillBarCloses = result;
-            }
-            else { timeTillBarCloses = timeTillBarClosesStandard; }
-            activeTasks = new BlockingCollection<Task>();
-            Random random = new Random();
-            dateTimeStart = DateTime.Now;
-            dateTimeLastUpdate = DateTime.Now;
+            pub = new Pub(this, ListBoxMessage, LabelMessage);
+            pub.simulationInitiated = true;
+            LabelMessage(Labell.GuestAmount, $"Guests: 0");
+            LabelMessage(Labell.GlassesAvailable, $"Available glasses: {pub.glassShelf.Count}" +
+                                             $"\nTotal: {pub.glassAmount}");
+            LabelMessage(Labell.SeatsAvailable, $"Available seats: {pub.availableSeats}" +
+                                             $"\nTotal: {pub.seatAmount}");
 
-            glassShelf = new BlockingCollection<Glass>();
-            for (int i = 0; i < glassAmount; i++)
-            {
-                Glass newGlass = new Glass();
-                glassShelf.Add(newGlass);
-            }
-
-            seats = new BlockingCollection<Seat>();
-            for (int i = 0; i < seatAmount; i++)
-            {
-                Seat newSeat = new Seat();
-                seats.Add(newSeat);
-            }
-            availableSeats = seatAmount;
-            LabelMessage(guestAmountLabel, $"Guests: 0");
-            LabelMessage(glassesAmountLabel, $"Available glasses: {glassShelf.Count}" +
-                                             $"\nTotal: {glassAmount}");
-            LabelMessage(availableSeatsAmountLabel, $"Available seats: {availableSeats}" +
-                                             $"\nTotal: {seatAmount}");
-
-            guests = new BlockingCollection<Guest>();
-            dirtyGlasses = new BlockingCollection<Glass>();
-            guestsWaitingForBeer = new ConcurrentQueue<Guest>();
-            guestsWaitingForSeat = new ConcurrentQueue<Guest>();
-
-            Bouncer bouncer = new Bouncer(this);
+            Bouncer bouncer = new Bouncer(pub, ListBoxMessage);
             bouncer.Work();
-            Bartender bartender = new Bartender(this);
+            Bartender bartender = new Bartender(pub, ListBoxMessage, LabelMessage);
             bartender.Start();
-            Waiter waiter = new Waiter(this);
+            Waiter waiter = new Waiter(pub, ListBoxMessage, LabelMessage);
             waiter.Start();
 
             Task.Run(() =>
             {
-                while (timeTillBarCloses > 0)
+                while (pub.timeTillBarCloses > 0)
                 {
-                    UpdatePubTimer();
-                    Thread.Sleep(1000 / simulationSpeed);
+                    pub.UpdatePubTimer();
+                    Thread.Sleep(1000 / pub.simulationSpeed);
                 }
             });
 
             Task.Run(() =>
             {
-                while (simulationInitiated)
+                while (pub.simulationInitiated)
                 {
-                    if (timeTillBarCloses <= 0 && AreTasksComplete())
+                    if (pub.timeTillBarCloses <= 0 && pub.AreTasksComplete())
                     {
-                        simulationInitiated = false;
+                        pub.simulationInitiated = false;
                         Dispatcher.Invoke(() =>
                         {
                             UISettingsOnBarClose();
                         });
                     }
-                    Thread.Sleep(250 / simulationSpeed);
+                    Thread.Sleep(250 / pub.simulationSpeed);
                 }
             });
         }
 
-        private bool AreTasksComplete()
+        public void SimulationSpeedValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            bool tasksCompleted = true;
-            foreach (Task task in activeTasks)
-            {
-                if (!task.IsCompleted) { tasksCompleted = false; }
-            }
-            return tasksCompleted;
-        }
-        
-        private void SimulationSpeedValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            simulationSpeed = (int)simulationSpeedSlider.Value;
+            pub.simulationSpeed = (int)simulationSpeedSlider.Value;
         }
 
-        public void ListBoxMessage(ListBox listBox, string message)
+        public void ListBoxMessage(object sender, string message)
         {
-            double elapsedTime = SecondsBetweenDates(dateTimeStart, DateTime.Now);
+            double elapsedTime = pub.SecondsBetweenDates(pub.dateTimeStart, DateTime.Now);
             elapsedTime = Math.Round(elapsedTime, 1, MidpointRounding.AwayFromZero);
             Dispatcher.Invoke(() =>
             {
-                listBox.Items.Insert(0, $"({elapsedTime}) {message}");
-                listBox.Items.Refresh();
+                ListBox listBox = null;
+                if (sender is Bartender) { listBox = bartenderListBox; }
+                else if (sender is Bouncer || sender is Guest) { listBox = guestListBox; }
+                else if (sender is Waiter) { listBox = waiterListBox; }
+                if (listBox != null)
+                {
+                    listBox.Items.Insert(0, $"({elapsedTime}) {message}");
+                    listBox.Items.Refresh();
+                }
             });
-        }
-        
-        public void LabelMessage(Label label, string message)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                label.Content = message;
-            });
-        }
-        public void UpdatePubTimer()
-        {
-            double elapsedTime = SecondsBetweenDates(dateTimeLastUpdate, DateTime.Now);
-            timeTillBarCloses -= elapsedTime * simulationSpeed;
-            dateTimeLastUpdate = DateTime.Now;
-            LabelMessage(timeTillBarClosesLabel, "Time till bar closes: " + (int)timeTillBarCloses);
         }
 
-        public double SecondsBetweenDates(DateTime earlierTime, DateTime laterTime)
+        public void LabelMessage(Labell editLabel, string message)
         {
-            TimeSpan elapsedTime = (laterTime - earlierTime);
-            double elapsedTimeSeconds = elapsedTime.TotalSeconds;
-            return elapsedTimeSeconds;
+            double elapsedTime = pub.SecondsBetweenDates(pub.dateTimeStart, DateTime.Now);
+            elapsedTime = Math.Round(elapsedTime, 1, MidpointRounding.AwayFromZero);
+            Dispatcher.Invoke(() =>
+            {
+                Label label = null;
+                if (editLabel == Labell.GuestAmount) { label = guestAmountLabel; }
+                else if (editLabel == Labell.SeatsAvailable) { label = availableSeatsAmountLabel; }
+                else if (editLabel == Labell.GlassesAvailable)  { label = glassesAmountLabel; }
+                else if (editLabel == Labell.TimeLeft) { label = timeTillBarClosesLabel; }
+                if (label != null) { label.Content = message; }
+            });
         }
-        void UISettingsOnBarOpen()
+
+            void UISettingsOnBarOpen()
         {
             openCloseBarButton.Content = "Close bar";
             glassesAmountTextBox.IsEnabled = false;

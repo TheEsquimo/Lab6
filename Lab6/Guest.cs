@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Threading;
 
 namespace Lab6
@@ -16,17 +17,24 @@ namespace Lab6
         const int timeToGetToSeat = 4000;
         const int minDrinkTime = 20000;
         const int maxDrinkTime = 30000;
-        
+        private Action<object, string> listBoxMessage;
+        private Action<Labell, string> labelMessage;
+        public Labell EditLabel { get; set; }
+
         public string Name { get; set; }
         public string Message { get; set; }
         internal Glass HeldGlass { get; set; }
         internal Seat MySeat { get; set; }
-        public MainWindow TheMainWindow { set; get; }
-        public Guest(string name, MainWindow mainWindow)
+        public Pub ThePub { get; }
+        public MainWindow TheMainWindow { get; }
+        public Guest(string name, Pub pub, MainWindow mainWindow, Action<object, string> theListBoxMessage, Action<Labell, string> theLabelMessage)
         {
             Name = name;
             HeldGlass = null;
+            ThePub = pub;
             TheMainWindow = mainWindow;
+            listBoxMessage = theListBoxMessage;
+            labelMessage = theLabelMessage;
         }
 
         internal void Start()
@@ -38,26 +46,27 @@ namespace Lab6
                 TakeASeat();
                 LeaveBar();
             });
-            TheMainWindow.activeTasks.Add(guestTask);
+            ThePub.activeTasks.Add(guestTask);
         }
         internal void EnterBar()
         {
+            ThePub.guestsWaitingForBeer.Enqueue(this);
             Message = $"{Name}: {enterBarMessage}";
-            TheMainWindow.ListBoxMessage(TheMainWindow.guestListBox, Message);
-            Thread.Sleep(timeToGetToBar / TheMainWindow.simulationSpeed);
+            listBoxMessage(this, Message);
+            Thread.Sleep(timeToGetToBar / ThePub.simulationSpeed);
             while (HeldGlass == null) { Thread.Sleep(250); }
         }
         internal void SearchForASeat()
         {
-            TheMainWindow.guestsWaitingForSeat.Enqueue(this);
+            ThePub.guestsWaitingForSeat.Enqueue(this);
             Message = $"{Name}: {searchForSeatMessage}";
-            TheMainWindow.ListBoxMessage(TheMainWindow.guestListBox, Message);
+            listBoxMessage(this, Message);
             while (true)
             {
-                foreach (var seat in TheMainWindow.seats)
+                foreach (var seat in ThePub.seats)
                 {
                     Guest tempGuest;
-                    TheMainWindow.guestsWaitingForSeat.TryPeek(out tempGuest);
+                    ThePub.guestsWaitingForSeat.TryPeek(out tempGuest);
                     if (seat.Guest == null && this == tempGuest)
                     {
                         seat.Guest = this;
@@ -70,30 +79,30 @@ namespace Lab6
         }
         internal void TakeASeat()
         {
-            Thread.Sleep(timeToGetToSeat / TheMainWindow.simulationSpeed);
-            TheMainWindow.availableSeats--;
-            TheMainWindow.LabelMessage(TheMainWindow.availableSeatsAmountLabel, $"Available seats: {TheMainWindow.availableSeats}" +
-                                             $"\nTotal: {TheMainWindow.seatAmount}");
+            Thread.Sleep(timeToGetToSeat / ThePub.simulationSpeed);
+            ThePub.availableSeats--;
+            labelMessage(Labell.SeatsAvailable, $"Available seats: {ThePub.availableSeats}" +
+                                             $"\nTotal: {ThePub.seatAmount}");
             Guest tempGuest = this;
-            TheMainWindow.guestsWaitingForSeat.TryDequeue(out tempGuest);
+            ThePub.guestsWaitingForSeat.TryDequeue(out tempGuest);
             Message = $"{Name}: {sitDownMessage}";
-            TheMainWindow.ListBoxMessage(TheMainWindow.guestListBox, Message);
+            listBoxMessage(this, Message);
             int drinkTime = random.Next((minDrinkTime), (maxDrinkTime));
-            Thread.Sleep(drinkTime / TheMainWindow.simulationSpeed);
+            Thread.Sleep(drinkTime / ThePub.simulationSpeed);
         }
         internal void LeaveBar()
         {
             Message = $"{Name}: {finishedDrinkMessage}";
-            TheMainWindow.ListBoxMessage(TheMainWindow.guestListBox, Message);
+            listBoxMessage(this, Message);
             MySeat.Guest = null;
-            TheMainWindow.dirtyGlasses.TryAdd(HeldGlass);
+            ThePub.dirtyGlasses.TryAdd(HeldGlass);
             HeldGlass = null;
             Guest tempGuest = this;
-            TheMainWindow.guests.TryTake(out tempGuest);
-            TheMainWindow.availableSeats++;
-            TheMainWindow.LabelMessage(TheMainWindow.availableSeatsAmountLabel, $"Available seats: {TheMainWindow.availableSeats}" +
-                                             $"\nTotal: {TheMainWindow.seatAmount}");
-            TheMainWindow.LabelMessage(TheMainWindow.guestAmountLabel, $"Guests: {TheMainWindow.guests.Count}");
+            ThePub.guests.TryTake(out tempGuest);
+            ThePub.availableSeats++;
+            labelMessage(Labell.SeatsAvailable, $"Available seats: {ThePub.availableSeats}" +
+                                             $"\nTotal: {ThePub.seatAmount}");
+            labelMessage(Labell.GuestAmount, $"Guests: {ThePub.guests.Count}");
         }
     }
 }
