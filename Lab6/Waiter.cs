@@ -2,13 +2,16 @@
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Threading;
 
 namespace Lab6
 {
     internal class Waiter
     {
-        internal MainWindow TheMainWindow { get; set; }
+        public MainWindow TheMainWindow { get; }
+        public Pub ThePub { get; }
+        private Action<ListBox, string> listBoxMessage;
         BlockingCollection<Glass> dirtyGlasses = new BlockingCollection<Glass>();
         const int collectDishesTime = 10000;
         const int cleanDishesTime = 15000;
@@ -18,39 +21,41 @@ namespace Lab6
         const string finishedCleaningMessage = "Put glasses back on shelf";
         const string goHomeMessage = "Waiter goes home";
         
-        public Waiter(MainWindow mainWindow)
+        public Waiter(MainWindow mainWindow, Pub pub, Action<ListBox, string> theListBoxMessage)
         {
             TheMainWindow = mainWindow;
+            ThePub = pub;
+            listBoxMessage = theListBoxMessage;
         }
 
         public void Start()
         {
             Task waiterTask = Task.Run(() =>
             {
-            while (TheMainWindow.timeTillBarCloses > 0 || TheMainWindow.guests.Count > 0 || TheMainWindow.dirtyGlasses.Count > 0)
+            while (ThePub.timeTillBarCloses > 0 || ThePub.guests.Count > 0 || ThePub.dirtyGlasses.Count > 0)
                 {
                     CollectDishes();
                     CleanDishes();
                 }
                 GoHome();
             });
-            TheMainWindow.activeTasks.Add(waiterTask);
+            ThePub.activeTasks.Add(waiterTask);
         }
 
         private void CollectDishes()
         {
-            TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, lookingForDishesMessage);
-            while (TheMainWindow.dirtyGlasses.Count <= 0)
+            listBoxMessage(TheMainWindow.waiterListBox, lookingForDishesMessage);
+            while (ThePub.dirtyGlasses.Count <= 0)
             {
-                if (TheMainWindow.timeTillBarCloses <= 0 && TheMainWindow.guests.Count <= 0) { return; }
+                if (ThePub.timeTillBarCloses <= 0 && ThePub.guests.Count <= 0) { return; }
                 Thread.Sleep(250);
             }
-            TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, collectingDishesMessage);
-            Thread.Sleep(collectDishesTime / TheMainWindow.simulationSpeed);
-            foreach(Glass glass in TheMainWindow.dirtyGlasses)
+            listBoxMessage(TheMainWindow.waiterListBox, collectingDishesMessage);
+            Thread.Sleep(collectDishesTime / ThePub.simulationSpeed);
+            foreach(Glass glass in ThePub.dirtyGlasses)
             {
                 Glass dirtyGlass;
-                TheMainWindow.dirtyGlasses.TryTake(out dirtyGlass);
+                ThePub.dirtyGlasses.TryTake(out dirtyGlass);
                 dirtyGlasses.TryAdd(dirtyGlass);
             }
         }
@@ -59,23 +64,23 @@ namespace Lab6
         {
             if (dirtyGlasses.Count > 0)
             {
-                TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, cleaningDishesMessage);
-                Thread.Sleep(cleanDishesTime / TheMainWindow.simulationSpeed);
+                listBoxMessage(TheMainWindow.waiterListBox, cleaningDishesMessage);
+                Thread.Sleep(cleanDishesTime / ThePub.simulationSpeed);
                 foreach(Glass glass in dirtyGlasses)
                 {
                     Glass cleanedGlass = null;
                     dirtyGlasses.TryTake(out cleanedGlass);
-                    TheMainWindow.glassShelf.TryAdd(cleanedGlass);
+                    ThePub.glassShelf.TryAdd(cleanedGlass);
                 }
-                TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, finishedCleaningMessage);
-                TheMainWindow.LabelMessage(TheMainWindow.glassesAmountLabel, $"Available glasses: {TheMainWindow.glassShelf.Count}" +
-                                                                             $"\nTotal: {TheMainWindow.glassAmount}");
+                listBoxMessage(TheMainWindow.waiterListBox, finishedCleaningMessage);
+                listBoxMessage(TheMainWindow.waiterListBox, $"Available glasses: {ThePub.glassShelf.Count}" +
+                                                                             $"\nTotal: {ThePub.glassAmount}");
             }
         }
 
         private void GoHome()
         {
-            TheMainWindow.ListBoxMessage(TheMainWindow.waiterListBox, goHomeMessage);
+            listBoxMessage(TheMainWindow.waiterListBox, goHomeMessage);
         }
     }
 }

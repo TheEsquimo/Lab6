@@ -23,40 +23,7 @@ namespace Lab6
     /// </summary>
     public partial class MainWindow : Window
     {
-        internal bool simulationInitiated = false;
-        internal bool doBusLoad;
-        internal const double timeTillBarClosesStandard = 120;
-        internal const int glassAmountStandard = 8;
-        internal const int seatAmountStandard = 9;
-        internal double timeTillBarCloses;
-        internal int glassAmount;
-        internal int seatAmount;
-        internal int availableSeats;
-        internal int simulationSpeed = 1;
-        internal DateTime dateTimeStart;
-        DateTime dateTimeLastUpdate;
-        internal BlockingCollection<Task> activeTasks;
-        internal BlockingCollection<Glass> glassShelf;
-        internal BlockingCollection<Glass> dirtyGlasses;
-        internal BlockingCollection<Seat> seats;
-        internal BlockingCollection<Guest> guests;
-        internal ConcurrentQueue<Guest> guestsWaitingForBeer;
-        internal ConcurrentQueue<Guest> guestsWaitingForSeat;
-        internal List<string> guestNames = new List<string>
-        {
-            "Bert",
-            "Berta",
-            "Bertil",
-            "Bertilda",
-            "Boris",
-            "Bertrand",
-            "Putin",
-            "Sonic",
-            "Guy",
-            "DudeGuyer",
-            "Bert-Erik"
-        };
-        
+        Pub pub;
         public MainWindow()
         {
             InitializeComponent();
@@ -66,7 +33,7 @@ namespace Lab6
 
         private void OnOpenCloseBarButtonClicked(object sender, RoutedEventArgs e)
         {
-            if (!simulationInitiated)
+            if (!pub.simulationInitiated)
             {
                 UISettingsOnBarOpen();
                 InitiateSimulation();
@@ -75,93 +42,48 @@ namespace Lab6
             {
                 openCloseBarButton.IsEnabled = false;
                 openCloseBarButton.Content = "Finishing up for the day";
-                timeTillBarCloses = 0;
+                pub.timeTillBarCloses = 0;
             }
         }
 
         public void InitiateSimulation()
         {
-            simulationInitiated = true;
-            if (doBusLoadCheckBox.IsChecked.Value) { doBusLoad = true; }
-            else { doBusLoad = false; }
-            int result;
-            var glassMatch = Regex.Match(glassesAmountTextBox.Text, @"^[1-9][0-9]*$");
-            if (glassMatch.Success && int.TryParse(glassesAmountTextBox.Text, out result))
-            {
-                glassAmount = result;
-            }
-            else { glassAmount = glassAmountStandard; }
-            var seatsMatch = Regex.Match(seatsAmountTextBox.Text, @"^[1-9][0-9]*$");
-            if (seatsMatch.Success && int.TryParse(seatsAmountTextBox.Text, out result))
-            {
-                 seatAmount = result; 
-            }
-            else { seatAmount = seatAmountStandard; }
-            var timeMatch = Regex.Match(timeTillBarClosesTextBox.Text, @"^[1-9][0-9]*$");
-            if (timeMatch.Success && int.TryParse(timeTillBarClosesTextBox.Text, out result))
-            {
-                timeTillBarCloses = result;
-            }
-            else { timeTillBarCloses = timeTillBarClosesStandard; }
-            activeTasks = new BlockingCollection<Task>();
-            Random random = new Random();
-            dateTimeStart = DateTime.Now;
-            dateTimeLastUpdate = DateTime.Now;
-
-            glassShelf = new BlockingCollection<Glass>();
-            for (int i = 0; i < glassAmount; i++)
-            {
-                Glass newGlass = new Glass();
-                glassShelf.Add(newGlass);
-            }
-
-            seats = new BlockingCollection<Seat>();
-            for (int i = 0; i < seatAmount; i++)
-            {
-                Seat newSeat = new Seat();
-                seats.Add(newSeat);
-            }
-            availableSeats = seatAmount;
+            pub = new Pub(this, ListBoxMessage, LabelMessage);
             LabelMessage(guestAmountLabel, $"Guests: 0");
-            LabelMessage(glassesAmountLabel, $"Available glasses: {glassShelf.Count}" +
-                                             $"\nTotal: {glassAmount}");
-            LabelMessage(availableSeatsAmountLabel, $"Available seats: {availableSeats}" +
-                                             $"\nTotal: {seatAmount}");
+            LabelMessage(glassesAmountLabel, $"Available glasses: {pub.glassShelf.Count}" +
+                                             $"\nTotal: {pub.glassAmount}");
+            LabelMessage(availableSeatsAmountLabel, $"Available seats: {pub.availableSeats}" +
+                                             $"\nTotal: {pub.seatAmount}");
 
-            guests = new BlockingCollection<Guest>();
-            dirtyGlasses = new BlockingCollection<Glass>();
-            guestsWaitingForBeer = new ConcurrentQueue<Guest>();
-            guestsWaitingForSeat = new ConcurrentQueue<Guest>();
-
-            Bouncer bouncer = new Bouncer(this);
+            Bouncer bouncer = new Bouncer(this, pub, ListBoxMessage, LabelMessage);
             bouncer.Work();
-            Bartender bartender = new Bartender(this);
+            Bartender bartender = new Bartender(this, pub, ListBoxMessage);
             bartender.Start();
-            Waiter waiter = new Waiter(this);
+            Waiter waiter = new Waiter(this, pub, ListBoxMessage);
             waiter.Start();
 
             Task.Run(() =>
             {
-                while (timeTillBarCloses > 0)
+                while (pub.timeTillBarCloses > 0)
                 {
                     UpdatePubTimer();
-                    Thread.Sleep(1000 / simulationSpeed);
+                    Thread.Sleep(1000 / pub.simulationSpeed);
                 }
             });
 
             Task.Run(() =>
             {
-                while (simulationInitiated)
+                while (pub.simulationInitiated)
                 {
-                    if (timeTillBarCloses <= 0 && AreTasksComplete())
+                    if (pub.timeTillBarCloses <= 0 && AreTasksComplete())
                     {
-                        simulationInitiated = false;
+                        pub.simulationInitiated = false;
                         Dispatcher.Invoke(() =>
                         {
                             UISettingsOnBarClose();
                         });
                     }
-                    Thread.Sleep(250 / simulationSpeed);
+                    Thread.Sleep(250 / pub.simulationSpeed);
                 }
             });
         }
@@ -169,7 +91,7 @@ namespace Lab6
         private bool AreTasksComplete()
         {
             bool tasksCompleted = true;
-            foreach (Task task in activeTasks)
+            foreach (Task task in pub.activeTasks)
             {
                 if (!task.IsCompleted) { tasksCompleted = false; }
             }
@@ -178,12 +100,12 @@ namespace Lab6
         
         private void SimulationSpeedValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            simulationSpeed = (int)simulationSpeedSlider.Value;
+            pub.simulationSpeed = (int)simulationSpeedSlider.Value;
         }
 
-        public void ListBoxMessage(ListBox listBox, string message)
+        public void ListBoxMessage(object sender, string message)
         {
-            double elapsedTime = SecondsBetweenDates(dateTimeStart, DateTime.Now);
+            double elapsedTime = SecondsBetweenDates(pub.dateTimeStart, DateTime.Now);
             elapsedTime = Math.Round(elapsedTime, 1, MidpointRounding.AwayFromZero);
             Dispatcher.Invoke(() =>
             {
@@ -201,10 +123,10 @@ namespace Lab6
         }
         public void UpdatePubTimer()
         {
-            double elapsedTime = SecondsBetweenDates(dateTimeLastUpdate, DateTime.Now);
-            timeTillBarCloses -= elapsedTime * simulationSpeed;
-            dateTimeLastUpdate = DateTime.Now;
-            LabelMessage(timeTillBarClosesLabel, "Time till bar closes: " + (int)timeTillBarCloses);
+            double elapsedTime = SecondsBetweenDates(pub.dateTimeLastUpdate, DateTime.Now);
+            pub.timeTillBarCloses -= elapsedTime * pub.simulationSpeed;
+            pub.dateTimeLastUpdate = DateTime.Now;
+            LabelMessage(timeTillBarClosesLabel, "Time till bar closes: " + (int)pub.timeTillBarCloses);
         }
 
         public double SecondsBetweenDates(DateTime earlierTime, DateTime laterTime)

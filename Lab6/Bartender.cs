@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Threading;
 
 namespace Lab6
 {
     class Bartender
     {
-        public MainWindow TheMainWindow { get; set; }
+        public MainWindow TheMainWindow { get; }
+        public Pub ThePub { get; }
+        private Action<ListBox, string> listBoxMessage;
         bool waitForCustomerMessageSent = false;
         const int fetchGlassTime = 3000;
         const int pourBeerTime = 3000;
@@ -18,16 +21,18 @@ namespace Lab6
         const string goHomeMessage = "Bartender goes home";
         Glass heldGlass;
 
-        public Bartender(MainWindow mainWindow)
+        public Bartender(MainWindow mainWindow, Pub pub, Action<ListBox, string> theListBoxMessage)
         {
             TheMainWindow = mainWindow;
+            ThePub = pub;
+            listBoxMessage = theListBoxMessage;
         }
 
         public void Start()
         {
             Task bartenderTask = Task.Run(() => 
             {
-                while (TheMainWindow.timeTillBarCloses > 0 || TheMainWindow.guests.Count > 0)
+                while (ThePub.timeTillBarCloses > 0 || ThePub.guests.Count > 0)
                 {
                     if (!WaitForCustomer())
                     {
@@ -38,16 +43,16 @@ namespace Lab6
                 }
                 GoHome();
             });
-            TheMainWindow.activeTasks.Add(bartenderTask);
+            ThePub.activeTasks.Add(bartenderTask);
         }
 
         private bool WaitForCustomer()
         {
-            if (TheMainWindow.guestsWaitingForBeer.IsEmpty)
+            if (ThePub.guestsWaitingForBeer.IsEmpty)
             {
                 if (!waitForCustomerMessageSent)
                 {
-                    TheMainWindow.ListBoxMessage(TheMainWindow.bartenderListBox, waitForCustomerMessage);
+                    listBoxMessage(TheMainWindow.bartenderListBox, waitForCustomerMessage);
                     waitForCustomerMessageSent = true;
                 }
                 Thread.Sleep(250);
@@ -61,30 +66,30 @@ namespace Lab6
 
         private void FetchGlass()
         {
-            while (TheMainWindow.glassShelf.Count <= 0)
+            while (ThePub.glassShelf.Count <= 0)
             {
                 Thread.Sleep(250);
             }
-            TheMainWindow.ListBoxMessage(TheMainWindow.bartenderListBox, fetchingGlassMessage);
-            Thread.Sleep(fetchGlassTime / TheMainWindow.simulationSpeed);
-            heldGlass = TheMainWindow.glassShelf.Take();
-            TheMainWindow.LabelMessage(TheMainWindow.glassesAmountLabel, $"Available glasses: {TheMainWindow.glassShelf.Count}" +
-                                                                         $"\nTotal: {TheMainWindow.glassAmount}");
+            listBoxMessage(TheMainWindow.bartenderListBox, fetchingGlassMessage);
+            Thread.Sleep(fetchGlassTime / ThePub.simulationSpeed);
+            heldGlass = ThePub.glassShelf.Take();
+            listBoxMessage(TheMainWindow.bartenderListBox, $"Available glasses: {ThePub.glassShelf.Count}" +
+                                                                         $"\nTotal: {ThePub.glassAmount}");
         }
 
         private void PourBeer()
         {
             Guest guestToRecieveBeer;
-            TheMainWindow.guestsWaitingForBeer.TryDequeue(out guestToRecieveBeer);
-            TheMainWindow.ListBoxMessage(TheMainWindow.bartenderListBox, $"{fillingGlassMessage} for {guestToRecieveBeer.Name}");
-            Thread.Sleep(pourBeerTime / TheMainWindow.simulationSpeed);
+            ThePub.guestsWaitingForBeer.TryDequeue(out guestToRecieveBeer);
+            listBoxMessage(TheMainWindow.bartenderListBox, $"{fillingGlassMessage} for {guestToRecieveBeer.Name}");
+            Thread.Sleep(pourBeerTime / ThePub.simulationSpeed);
             guestToRecieveBeer.HeldGlass = heldGlass;
             heldGlass = null;
         }
 
         private void GoHome()
         {
-            TheMainWindow.ListBoxMessage(TheMainWindow.bartenderListBox, goHomeMessage);
+            listBoxMessage(TheMainWindow.bartenderListBox, goHomeMessage);
         }
     }
 }
