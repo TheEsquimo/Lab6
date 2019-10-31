@@ -11,21 +11,16 @@ namespace Lab6
 {
     class Bouncer
     {
-        public MainWindow TheMainWindow { get; }
         public Pub ThePub { get; }
-        private Action<ListBox, string> listBoxMessage;
-        private Action<Label, string> labelMessage;
+        private Action<object, string> listBoxMessage;
         const int fastestGuestLetInTime = 3000;
         const int slowestGuestLetInTime = 10000;
         Random random = new Random();
         
-        public Bouncer(MainWindow mainWindow, Pub pub, Action<ListBox, string> theListBoxMessage, Action<Label, string> theLabelMessage)
+        public Bouncer(Pub pub, Action<object, string> theListBoxMessage)
         {
-            TheMainWindow = mainWindow;
             ThePub = pub;
             listBoxMessage = theListBoxMessage;
-            labelMessage = theLabelMessage;
-
         }
         public void Work()
         {
@@ -33,13 +28,13 @@ namespace Lab6
             {
                 if (ThePub.timeTillBarCloses <= 0)
                 {
-                    listBoxMessage(TheMainWindow.guestListBox, "Bouncer goes home");
+                    listBoxMessage(this, "Bouncer goes home");
                     return;
                 }
                 Thread.Sleep((random.Next(fastestGuestLetInTime, slowestGuestLetInTime)) / ThePub.simulationSpeed);
                 if (ThePub.timeTillBarCloses > 0)
                 {
-                    if(TheMainWindow.SecondsBetweenDates(ThePub.dateTimeStart ,DateTime.Now) > 20 && ThePub.doBusLoad)
+                    if(ThePub.SecondsBetweenDates(ThePub.dateTimeStart ,DateTime.Now) > 20 && ThePub.doBusLoad)
                     {
                         ThePub.LetGuestsIn(15);
                         ThePub.doBusLoad = false;

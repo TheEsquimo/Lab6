@@ -28,8 +28,8 @@ namespace Lab6
         internal BlockingCollection<Guest> guests;
         internal ConcurrentQueue<Guest> guestsWaitingForBeer;
         internal ConcurrentQueue<Guest> guestsWaitingForSeat;
-        private Action<Label, string> labelMessage;
-        private Action<ListBox, string> listBoxMessage;
+        private Action<Labell, string> labelMessage;
+        private Action<object, string> listBoxMessage;
         private MainWindow TheMainWindow { get; }
         private Random random = new Random();
         internal List<string> guestNames = new List<string>
@@ -46,13 +46,13 @@ namespace Lab6
             "DudeGuyer",
             "Bert-Erik"
         };
+        public Labell EditLabel { get; }
 
-        public Pub(MainWindow mainWindow, Action<ListBox, string> theListBoxMessage, Action<Label, string> theLabelMessage)
+        public Pub(MainWindow mainWindow, Action<object, string> theListBoxMessage, Action<Labell, string> theLabelMessage)
         {
             TheMainWindow = mainWindow;
             labelMessage = theLabelMessage;
             listBoxMessage = theListBoxMessage;
-            simulationInitiated = true;
 
             if (TheMainWindow.doBusLoadCheckBox.IsChecked.Value) { doBusLoad = true; }
             else { doBusLoad = false; }
@@ -106,7 +106,7 @@ namespace Lab6
             string nameOfNewGuest = guestNames[randomNameNumber];
             Guest newGuest = new Guest(nameOfNewGuest, this, TheMainWindow, listBoxMessage, labelMessage);
             guests.Add(newGuest);
-            labelMessage(TheMainWindow.guestAmountLabel, $"Guests: {guests.Count}");
+            labelMessage(Labell.GuestAmount, $"Guests: {guests.Count}");
             newGuest.Start();
         }
 
@@ -120,7 +120,32 @@ namespace Lab6
                 guests.Add(newGuest);
                 newGuest.Start();
             }
-            labelMessage(TheMainWindow.guestAmountLabel, $"Guests: {guests.Count}");
+            labelMessage(Labell.GuestAmount, $"Guests: {guests.Count}");
+        }
+
+        public bool AreTasksComplete()
+        {
+            bool tasksCompleted = true;
+            foreach (Task task in activeTasks)
+            {
+                if (!task.IsCompleted) { tasksCompleted = false; }
+            }
+            return tasksCompleted;
+        }
+
+        public void UpdatePubTimer()
+        {
+            double elapsedTime = SecondsBetweenDates(dateTimeLastUpdate, DateTime.Now);
+            timeTillBarCloses -= elapsedTime * simulationSpeed;
+            dateTimeLastUpdate = DateTime.Now;
+            labelMessage(Labell.TimeLeft, "Time till bar closes: " + (int)timeTillBarCloses);
+        }
+
+        public double SecondsBetweenDates(DateTime earlierTime, DateTime laterTime)
+        {
+            TimeSpan elapsedTime = (laterTime - earlierTime);
+            double elapsedTimeSeconds = elapsedTime.TotalSeconds;
+            return elapsedTimeSeconds;
         }
     }
 }

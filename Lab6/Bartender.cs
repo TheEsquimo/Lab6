@@ -9,9 +9,9 @@ namespace Lab6
 {
     class Bartender
     {
-        public MainWindow TheMainWindow { get; }
         public Pub ThePub { get; }
-        private Action<ListBox, string> listBoxMessage;
+        private Action<object, string> listBoxMessage;
+        private Action<Labell, string> labelMessage;
         bool waitForCustomerMessageSent = false;
         const int fetchGlassTime = 3000;
         const int pourBeerTime = 3000;
@@ -21,11 +21,11 @@ namespace Lab6
         const string goHomeMessage = "Bartender goes home";
         Glass heldGlass;
 
-        public Bartender(MainWindow mainWindow, Pub pub, Action<ListBox, string> theListBoxMessage)
+        public Bartender(Pub pub, Action<object, string> theListBoxMessage, Action<Labell, string> theLabelMessage)
         {
-            TheMainWindow = mainWindow;
             ThePub = pub;
             listBoxMessage = theListBoxMessage;
+            labelMessage = theLabelMessage;
         }
 
         public void Start()
@@ -52,7 +52,7 @@ namespace Lab6
             {
                 if (!waitForCustomerMessageSent)
                 {
-                    listBoxMessage(TheMainWindow.bartenderListBox, waitForCustomerMessage);
+                    listBoxMessage(this, waitForCustomerMessage);
                     waitForCustomerMessageSent = true;
                 }
                 Thread.Sleep(250);
@@ -70,10 +70,10 @@ namespace Lab6
             {
                 Thread.Sleep(250);
             }
-            listBoxMessage(TheMainWindow.bartenderListBox, fetchingGlassMessage);
+            listBoxMessage(this, fetchingGlassMessage);
             Thread.Sleep(fetchGlassTime / ThePub.simulationSpeed);
             heldGlass = ThePub.glassShelf.Take();
-            listBoxMessage(TheMainWindow.bartenderListBox, $"Available glasses: {ThePub.glassShelf.Count}" +
+            labelMessage(Labell.GlassesAvailable, $"Available glasses: {ThePub.glassShelf.Count}" +
                                                                          $"\nTotal: {ThePub.glassAmount}");
         }
 
@@ -81,7 +81,7 @@ namespace Lab6
         {
             Guest guestToRecieveBeer;
             ThePub.guestsWaitingForBeer.TryDequeue(out guestToRecieveBeer);
-            listBoxMessage(TheMainWindow.bartenderListBox, $"{fillingGlassMessage} for {guestToRecieveBeer.Name}");
+            listBoxMessage(this, $"{fillingGlassMessage} for {guestToRecieveBeer.Name}");
             Thread.Sleep(pourBeerTime / ThePub.simulationSpeed);
             guestToRecieveBeer.HeldGlass = heldGlass;
             heldGlass = null;
@@ -89,7 +89,7 @@ namespace Lab6
 
         private void GoHome()
         {
-            listBoxMessage(TheMainWindow.bartenderListBox, goHomeMessage);
+            listBoxMessage(this, goHomeMessage);
         }
     }
 }

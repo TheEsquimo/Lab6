@@ -29,6 +29,7 @@ namespace Lab6
             InitializeComponent();
             openCloseBarButton.Click += OnOpenCloseBarButtonClicked;
             simulationSpeedSlider.ValueChanged += SimulationSpeedValueChanged;
+            pub = new Pub(this, ListBoxMessage, LabelMessage);
         }
 
         private void OnOpenCloseBarButtonClicked(object sender, RoutedEventArgs e)
@@ -49,24 +50,25 @@ namespace Lab6
         public void InitiateSimulation()
         {
             pub = new Pub(this, ListBoxMessage, LabelMessage);
-            LabelMessage(guestAmountLabel, $"Guests: 0");
-            LabelMessage(glassesAmountLabel, $"Available glasses: {pub.glassShelf.Count}" +
+            pub.simulationInitiated = true;
+            LabelMessage(Labell.GuestAmount, $"Guests: 0");
+            LabelMessage(Labell.GlassesAvailable, $"Available glasses: {pub.glassShelf.Count}" +
                                              $"\nTotal: {pub.glassAmount}");
-            LabelMessage(availableSeatsAmountLabel, $"Available seats: {pub.availableSeats}" +
+            LabelMessage(Labell.SeatsAvailable, $"Available seats: {pub.availableSeats}" +
                                              $"\nTotal: {pub.seatAmount}");
 
-            Bouncer bouncer = new Bouncer(this, pub, ListBoxMessage, LabelMessage);
+            Bouncer bouncer = new Bouncer(pub, ListBoxMessage);
             bouncer.Work();
-            Bartender bartender = new Bartender(this, pub, ListBoxMessage);
+            Bartender bartender = new Bartender(pub, ListBoxMessage, LabelMessage);
             bartender.Start();
-            Waiter waiter = new Waiter(this, pub, ListBoxMessage);
+            Waiter waiter = new Waiter(pub, ListBoxMessage, LabelMessage);
             waiter.Start();
 
             Task.Run(() =>
             {
                 while (pub.timeTillBarCloses > 0)
                 {
-                    UpdatePubTimer();
+                    pub.UpdatePubTimer();
                     Thread.Sleep(1000 / pub.simulationSpeed);
                 }
             });
@@ -75,7 +77,7 @@ namespace Lab6
             {
                 while (pub.simulationInitiated)
                 {
-                    if (pub.timeTillBarCloses <= 0 && AreTasksComplete())
+                    if (pub.timeTillBarCloses <= 0 && pub.AreTasksComplete())
                     {
                         pub.simulationInitiated = false;
                         Dispatcher.Invoke(() =>
@@ -88,54 +90,45 @@ namespace Lab6
             });
         }
 
-        private bool AreTasksComplete()
-        {
-            bool tasksCompleted = true;
-            foreach (Task task in pub.activeTasks)
-            {
-                if (!task.IsCompleted) { tasksCompleted = false; }
-            }
-            return tasksCompleted;
-        }
-        
-        private void SimulationSpeedValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        public void SimulationSpeedValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             pub.simulationSpeed = (int)simulationSpeedSlider.Value;
         }
 
         public void ListBoxMessage(object sender, string message)
         {
-            double elapsedTime = SecondsBetweenDates(pub.dateTimeStart, DateTime.Now);
+            double elapsedTime = pub.SecondsBetweenDates(pub.dateTimeStart, DateTime.Now);
             elapsedTime = Math.Round(elapsedTime, 1, MidpointRounding.AwayFromZero);
             Dispatcher.Invoke(() =>
             {
-                listBox.Items.Insert(0, $"({elapsedTime}) {message}");
-                listBox.Items.Refresh();
+                ListBox listBox = null;
+                if (sender is Bartender) { listBox = bartenderListBox; }
+                else if (sender is Bouncer || sender is Guest) { listBox = guestListBox; }
+                else if (sender is Waiter) { listBox = waiterListBox; }
+                if (listBox != null)
+                {
+                    listBox.Items.Insert(0, $"({elapsedTime}) {message}");
+                    listBox.Items.Refresh();
+                }
             });
-        }
-        
-        public void LabelMessage(Label label, string message)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                label.Content = message;
-            });
-        }
-        public void UpdatePubTimer()
-        {
-            double elapsedTime = SecondsBetweenDates(pub.dateTimeLastUpdate, DateTime.Now);
-            pub.timeTillBarCloses -= elapsedTime * pub.simulationSpeed;
-            pub.dateTimeLastUpdate = DateTime.Now;
-            LabelMessage(timeTillBarClosesLabel, "Time till bar closes: " + (int)pub.timeTillBarCloses);
         }
 
-        public double SecondsBetweenDates(DateTime earlierTime, DateTime laterTime)
+        public void LabelMessage(Labell editLabel, string message)
         {
-            TimeSpan elapsedTime = (laterTime - earlierTime);
-            double elapsedTimeSeconds = elapsedTime.TotalSeconds;
-            return elapsedTimeSeconds;
+            double elapsedTime = pub.SecondsBetweenDates(pub.dateTimeStart, DateTime.Now);
+            elapsedTime = Math.Round(elapsedTime, 1, MidpointRounding.AwayFromZero);
+            Dispatcher.Invoke(() =>
+            {
+                Label label = null;
+                if (editLabel == Labell.GuestAmount) { label = guestAmountLabel; }
+                else if (editLabel == Labell.SeatsAvailable) { label = availableSeatsAmountLabel; }
+                else if (editLabel == Labell.GlassesAvailable)  { label = glassesAmountLabel; }
+                else if (editLabel == Labell.TimeLeft) { label = timeTillBarClosesLabel; }
+                if (label != null) { label.Content = message; }
+            });
         }
-        void UISettingsOnBarOpen()
+
+            void UISettingsOnBarOpen()
         {
             openCloseBarButton.Content = "Close bar";
             glassesAmountTextBox.IsEnabled = false;
